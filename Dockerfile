@@ -1,4 +1,4 @@
-FROM eclipse-temurin:23-jdk
+FROM eclipse-temurin:23-jdk AS builder
 
 # Set the Current Working Directory inside the container
 WORKDIR /app
