@@ -5,10 +5,9 @@ WORKDIR /app
 
 COPY . .
 
-# clean up the file
-RUN sed -i 's/\r$//' mvnw
+
 # run with the SH path
-RUN /bin/sh mvnw dependency:resolve
+RUN ./mvnw clean pakage -DSkipTests
 
 FROM eclipse-temurin:23-jre
 WORKDIR /app
