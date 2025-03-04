@@ -5,8 +5,10 @@ WORKDIR /app
 
 COPY . .
 
-# Build the Go app
-RUN ./mvnw clean package
+# clean up the file
+RUN sed -i 's/\r$//' mvnw
+# run with the SH path
+RUN /bin/sh mvnw dependency:resolve
 
 FROM eclipse-temurin:23-jre
 WORKDIR /app
