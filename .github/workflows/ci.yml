@@ -24,11 +24,5 @@ jobs:
    - name: Build
      run: mvn clean install
 
-   - name: Upload artifact for deployment job
-     uses: actions/upload-artifact@v2
-     with:
-       name: java-app
-       path: '${{ github.workspace }}/target/*.jar'
-
    - name: Run test
      run: mvn test
