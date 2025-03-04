@@ -5,7 +5,7 @@ WORKDIR /app
 
 COPY . .
 
-
+RUN chmod +x mvnw
 # run with the SH path
 RUN ./mvnw clean pakage -DSkipTests
 
