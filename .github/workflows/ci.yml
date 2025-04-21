@@ -11,6 +11,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      DB_URL: ${{secrets.DB_URL}}
+
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
