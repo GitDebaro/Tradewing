@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public interface UserController {
 
     @GetMapping("/")
