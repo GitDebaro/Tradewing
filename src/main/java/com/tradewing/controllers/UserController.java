@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public interface UserController {
     List<UserEntity> getAllUsers();	
 
     @PostMapping("/addUser")
-    void addUser(@RequestBody UserEntity user);
+    ResponseEntity<?> addUser(@RequestBody UserEntity user);
     
 
 }

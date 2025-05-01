@@ -1,5 +1,7 @@
 package com.tradewing.services;
 
+import org.springframework.http.ResponseEntity;
+
 import com.tradewing.models.UserEntity;
 import java.util.List;
 
@@ -7,6 +9,6 @@ public interface UserService {
 
 	List<UserEntity> getAllUsers();
 
-	void addUser(UserEntity user);
+	ResponseEntity<?> addUser(UserEntity user);
 
 }

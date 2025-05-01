@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.http.ResponseEntity;
 
 
 import java.util.List;
@@ -29,8 +30,8 @@ public class UserControllerImpl implements UserController {
 
 	@Override
 	@PostMapping("/addUser")
-	public void addUser(@RequestBody UserEntity user){
-		userSC.addUser(user);
+	public ResponseEntity<?> addUser(@RequestBody UserEntity user){
+		return userSC.addUser(user);
 	}
 
 }
