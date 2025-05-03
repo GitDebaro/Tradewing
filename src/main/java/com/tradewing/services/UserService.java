@@ -9,4 +9,8 @@ public interface UserService {
 
 	void addUser(UserEntity user);
 
+	String authenticate(String email, String password);
+
+    String generateToken(String email);
+	
 }

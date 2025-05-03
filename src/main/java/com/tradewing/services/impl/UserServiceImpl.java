@@ -3,16 +3,30 @@ package com.tradewing.services.impl;
 import com.tradewing.models.UserEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+
+import javax.crypto.SecretKey;
+
+import java.util.*;
 
 @Service
-@AllArgsConstructor
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepo usrRepo;
+
+	@Value("${my.secret.jwt}")
+    private String jwtSecret;
+
+	public UserServiceImpl(UserRepo usrRepo) {
+        this.usrRepo = usrRepo;
+    }
 
 	@Override
 	public List<UserEntity> getAllUsers(){
@@ -23,5 +37,38 @@ public class UserServiceImpl implements UserService {
 	public void addUser(UserEntity user){
 		usrRepo.save(user);
 	}
+
+	public String authenticate(String email, String rawPassword){
+        Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
+
+        if(Optionaluser.isEmpty()){
+            throw new RuntimeException("User not found");
+        }
+
+        UserEntity user = Optionaluser.get();
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String hashed = encoder.encode(rawPassword);
+
+        if(!encoder.matches(hashed, user.getPassword())){
+            throw new RuntimeException("Wrong password, User: " + user.getEmail());
+        }
+
+        return generateToken(user.getEmail());
+    }
+
+    public String generateToken(String email) {
+        Date now = new Date();
+        Date expiring = new Date(now.getTime() + 86400000);
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+
+        String token = Jwts.builder().setIssuer(email)
+                                .setIssuedAt(now)
+                                .setExpiration(expiring)
+                                .signWith(key,SignatureAlgorithm.HS256)
+                                .compact();
+        
+        return token;
+    }
 
 }

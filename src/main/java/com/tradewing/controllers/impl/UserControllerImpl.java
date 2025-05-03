@@ -1,6 +1,7 @@
 package com.tradewing.controllers.impl;
 
 import com.tradewing.controllers.UserController;
+import com.tradewing.dto.LoginRequest;
 import com.tradewing.models.UserEntity;
 import com.tradewing.services.UserService;
 import lombok.AllArgsConstructor;
@@ -31,6 +32,11 @@ public class UserControllerImpl implements UserController {
 	@PostMapping("/addUser")
 	public void addUser(@RequestBody UserEntity user){
 		userSC.addUser(user);
+	}
+
+	@Override
+	public String login(@RequestBody LoginRequest request) {
+		return userSC.authenticate(request.getEmail(), request.getPassword());
 	}
 
 }
