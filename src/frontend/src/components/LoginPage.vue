@@ -6,7 +6,7 @@
   <router-link to="/register">You don't have account. Register</router-link>
   <h1>{{ login }}</h1>
   <div class="login-container">
-    <h1>Tradewing Login</h1>
+    <h1>##Tradewing Login##</h1>
     <form id="LoginForm" class="form login-form">
       <div class="grid">
                 <input v-model="email" type="email" id="email" name="email" placeholder="Email..." required>
