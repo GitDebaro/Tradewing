@@ -2,10 +2,12 @@ package com.tradewing.controllers.impl;
 
 import com.tradewing.controllers.UserController;
 import com.tradewing.dto.LoginRequest;
+import com.tradewing.dto.LoginResponse;
 import com.tradewing.models.UserEntity;
 import com.tradewing.services.UserService;
 import lombok.AllArgsConstructor;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,8 +37,12 @@ public class UserControllerImpl implements UserController {
 	}
 
 	@Override
-	public String login(@RequestBody LoginRequest request) {
-		return userSC.authenticate(request.getEmail(), request.getPassword());
+	@PostMapping("/loginUser")
+	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+		String token = userSC.authenticate(request.getEmail(), request.getPassword());
+		LoginResponse login = new LoginResponse(token);
+
+		return ResponseEntity.ok(login);
 	}
 
 }

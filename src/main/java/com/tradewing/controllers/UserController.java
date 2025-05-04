@@ -2,7 +2,9 @@ package com.tradewing.controllers;
 
 import com.tradewing.models.UserEntity;
 import com.tradewing.dto.LoginRequest;
+import com.tradewing.dto.LoginResponse;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,7 +22,7 @@ public interface UserController {
     void addUser(@RequestBody UserEntity user);
 
     @PostMapping("/loginUser")
-    String login(@RequestBody LoginRequest request); //cambiar más adelante por ResponseEntity<?>
+    ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request); 
     
 
 }

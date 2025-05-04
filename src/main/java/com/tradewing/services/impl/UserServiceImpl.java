@@ -8,9 +8,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
+
+import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.SecretKey;
 
@@ -42,18 +44,23 @@ public class UserServiceImpl implements UserService {
         Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
 
         if(Optionaluser.isEmpty()){
-            throw new RuntimeException("User not found");
+            throw new RuntimeException("[LOGIN] User" + email + "not found");
         }
 
         UserEntity user = Optionaluser.get();
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String hashed = encoder.encode(rawPassword);
+        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        //String hashed = encoder.encode(rawPassword);
 
-        if(!encoder.matches(hashed, user.getPassword())){
-            throw new RuntimeException("Wrong password, User: " + user.getEmail());
+        //if(!encoder.matches(hashed, user.getPassword())){
+          //  throw new RuntimeException("Wrong password, User: " + user.getEmail());
+        //}
+
+        if(!DigestUtils.sha256Hex(rawPassword).equals(user.getPassword())){
+            throw new RuntimeException("[LOGIN]: Wrong password, User: " + user.getEmail());
         }
 
+        System.out.println("[LOGIN]: Login exitoso, generando token.");
         return generateToken(user.getEmail());
     }
 
@@ -67,7 +74,7 @@ public class UserServiceImpl implements UserService {
                                 .setExpiration(expiring)
                                 .signWith(key,SignatureAlgorithm.HS256)
                                 .compact();
-        
+        System.out.println("[LOGIN]: Token generado: " + token);
         return token;
     }
 
