@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserEntity {
@@ -26,7 +28,7 @@ public class UserEntity {
     @Column(nullable = false, length = 500)
     private String password;
 
-    private String image;
+    private String image = "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png";
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
