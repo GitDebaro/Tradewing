@@ -1,23 +1,34 @@
 <template>
-  <h1 class="text-3xl font-bold underline bg-red-500">Hola con Tailwind</h1>
-  <h1>{{ msg }}</h1>
-  <h2 class="bg-blue-900"><router-view/></h2>
-  <router-link to="/dashboard">Login</router-link>
-  <router-link to="/register">You don't have account. Register</router-link>
-  <h1>{{ login }}</h1>
-  <div class="login-container">
-    <h1>##Tradewing Login##</h1>
-    <form id="LoginForm" class="form login-form">
+  <head>
+    <link rel="stylesheet" href="../assets/css/LoginPage.css">
+  </head>
+  <main class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 mx-auto mt-10 space-y-6">
+    <div class="flex justify-center">
+      <img src="@/assets/img/LOGO.png" alt="Logo" width="300" height="200" class="object-contain" />
+    </div>
+
+    <form @submit.prevent="handleLogin" class="space-y-3">
       <div class="grid">
-                <input v-model="email" type="email" id="email" name="email" placeholder="Email..." required>
-            </div>
-            <div class="grid">
-                <input v-model ="password" type="password" id="password" name="password" placeholder="Password..." required>
-            </div>
-            <button type="submit" @click.prevent="handleLogin">Login</button>
+        <label class="block text-sm mb-2">Email:</label>
+        <input v-model="email" id="input" type="email" required placeholder="..."/>
+      </div>
+      <div class="grid">
+        <label class="block text-sm mb-2">Password:</label>
+        <input v-model="password" id="input" type="password" required placeholder="..."/>
+        <div v-if="passLengthError" class="text-red-500 text-sm mt-1">{{ passLengthError }}</div>
+      </div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+        Login
+      </button>
     </form>
-  </div>
+    <div class="text-center mt-4">
+        <p class="text-sm text-gray-500">You dont have an account? 
+          <router-link to="/register" class="text-blue-600 hover:text-blue-700">Register</router-link>
+        </p>
+    </div>
+  </main>
 </template>
+
 
 <script>
 export default {
@@ -29,13 +40,6 @@ export default {
       email: '',
       password: ''
     }
-  },
-  mounted() {
-    fetch("/api/users/")
-      .then((response) => response.text())
-      .then((data) => {
-          this.msg = data;
-      });
   },
   methods: {
     async handleLogin(){
@@ -67,5 +71,6 @@ export default {
   }
 }
 </script>
+
 
 

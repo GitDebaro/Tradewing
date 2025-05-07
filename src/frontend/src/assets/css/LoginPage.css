@@ -1,0 +1,5 @@
+#input {
+    border: 2px solid black; /* Grosor 2px, sólido, color negro */
+    border-radius: 5px;    /* Esquinas redondeadas de 5px */
+    padding: 10px;       /* Espacio de 10px entre el borde y el texto */
+}
