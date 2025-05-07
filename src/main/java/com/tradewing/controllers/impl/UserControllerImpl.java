@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
@@ -39,10 +39,16 @@ public class UserControllerImpl implements UserController {
 	@Override
 	@PostMapping("/loginUser")
 	public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-		String token = userSC.authenticate(request.getEmail(), request.getPassword());
-		LoginResponse login = new LoginResponse(token);
+		try{
+			String token = userSC.authenticate(request.getEmail(), request.getPassword());
+			LoginResponse login = new LoginResponse(token);
 
-		return ResponseEntity.ok(login);
+			return ResponseEntity.ok(login);
+		}
+		catch(RuntimeException e){
+			System.out.println("[LOGIN][ERROR] Failed to login user:" + request.getEmail());
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 }

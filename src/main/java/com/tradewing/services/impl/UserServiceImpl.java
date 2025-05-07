@@ -8,7 +8,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-//import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -48,13 +47,6 @@ public class UserServiceImpl implements UserService {
         }
 
         UserEntity user = Optionaluser.get();
-
-        //BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        //String hashed = encoder.encode(rawPassword);
-
-        //if(!encoder.matches(hashed, user.getPassword())){
-          //  throw new RuntimeException("Wrong password, User: " + user.getEmail());
-        //}
 
         if(!DigestUtils.sha256Hex(rawPassword).equals(user.getPassword())){
             throw new RuntimeException("[LOGIN]: Wrong password, User: " + user.getEmail());

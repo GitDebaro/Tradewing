@@ -1,10 +1,9 @@
 package com.tradewing.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.*;
 
+@Getter
 @AllArgsConstructor
 public class LoginResponse {
     private String token;
-
-    public String getToken() {return this.token;}
 }
