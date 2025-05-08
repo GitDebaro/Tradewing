@@ -8,14 +8,29 @@ import com.tradewing.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
+import lombok.RequiredArgsConstructor;
 
-import java.util.List;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+
+import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Value;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
+import javax.crypto.SecretKey;
+
+import java.util.*;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepo usrRepo;
+
+	@Value("${my.secret.jwt}")
+    private String jwtSecret;
 
 	@Override
 	public List<UserEntity> getAllUsers(){
@@ -40,5 +55,36 @@ public class UserServiceImpl implements UserService {
 				return new ResponseEntity<>("An error ocurred while creating a new User. Try again later", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
+	public String authenticate(String email, String rawPassword){
+        Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
+
+        if(Optionaluser.isEmpty()){
+            throw new RuntimeException("[LOGIN] User" + email + "not found");
+        }
+
+        UserEntity user = Optionaluser.get();
+
+        if(!DigestUtils.sha256Hex(rawPassword).equals(user.getPassword())){
+            throw new RuntimeException("[LOGIN]: Wrong password, User: " + user.getEmail());
+        }
+
+        System.out.println("[LOGIN]: Login exitoso, generando token.");
+        return generateToken(user.getEmail());
+    }
+
+    public String generateToken(String email) {
+        Date now = new Date();
+        Date expiring = new Date(now.getTime() + 86400000);
+        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+
+        String token = Jwts.builder().setIssuer(email)
+                                .setIssuedAt(now)
+                                .setExpiration(expiring)
+                                .signWith(key,SignatureAlgorithm.HS256)
+                                .compact();
+        System.out.println("[LOGIN]: Token generado: " + token);
+        return token;
+    }
 
 }

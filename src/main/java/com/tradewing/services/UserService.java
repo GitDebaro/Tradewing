@@ -11,4 +11,8 @@ public interface UserService {
 
 	ResponseEntity<?> addUser(UserEntity user);
 
+	String authenticate(String email, String password);
+
+    String generateToken(String email);
+	
 }

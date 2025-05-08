@@ -1,27 +1,87 @@
 <template>
-  <h1 class="text-3xl font-bold underline bg-red-500">Hola con Tailwind</h1>
-  <h1>{{ msg }}</h1>
-  <h2 class="bg-blue-900"><router-view/></h2>
-  <router-link to="/dashboard">Login</router-link>
-  <router-link to="/register">You don't have account. Register</router-link>
+  <main class="w-full max-w-md bg-white rounded-xl shadow-lg p-6 mx-auto mt-10 space-y-6">
+    <div class="flex justify-center">
+      <img src="@/assets/img/LOGO.png" alt="Logo" width="300" height="200" class="object-contain" />
+    </div>
+
+    <form @submit.prevent="handleLogin" class="space-y-3">
+     <label class="block text-sm mb-2">Email:</label>
+      <input v-model="email" type="email" required />
+      <label class="block text-sm mb-2">Password:</label>
+      <input v-model="password" type="password" required />
+      <div v-if="loginError" class="text-red-500 text-sm mt-1">{{ loginError }}</div>
+      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+        Sign in
+      </button>
+    </form>
+    <div class="text-center mt-4">
+        <p class="text-sm text-gray-500">You dont have an account? 
+          <router-link to="/register" class="text-blue-600 hover:text-blue-700">Sign up</router-link>
+        </p>
+    </div>
+  </main>
 </template>
 
+
 <script>
+import axios from 'axios';
 export default {
-  name: 'LoginPage',
   data() {
     return {
-      msg: ''
+      email: '',
+      password: '',
+      loginError: ''
     }
   },
-  mounted() {
-    fetch("/api/users/")
-      .then((response) => response.text())
-      .then((data) => {
-          this.msg = data;
-      });
+  methods: {
+    async handleLogin(){
+      axios.post('/api/users/loginUser',{
+          email: this.email,
+          password: this.password
+        })
+        .then((response) =>{
+          localStorage.setItem('jwt', response.data.token);
+          console.log('[LOGINPAGE] Successful login: ', response.data.token);
+          this.$router.push('/dashboard');
+        })
+        .catch((error) => {
+          console.log(error)
+          this.loginError = 'Login failed. Please check your credentials.';
+        })
+
+/*
+      try {
+          const response = await fetch('/api/users/loginUser', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              email: this.email,
+              password: this.password
+            })
+        });
+
+        if (!response.ok) {
+          throw new Error('Login failed');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('jwt', data.token);
+        console.log('[LOGINPAGE] Successful login: ',data.token);
+        this.$router.push('/dashboard');
+
+      } catch (err) {
+        this.loginError = 'Login failed. Please check your credentials.';
+      }
+        */
+    }
   }
 }
 </script>
 
-
+<style scoped>
+input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+</style>
