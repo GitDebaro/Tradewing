@@ -51,21 +51,11 @@ export default{
       this.passLengthError = this.password.length > 7 ? '' : 'Password must be at least 8 characters long'
       this.passMatchError = this.password === this.repeatPass ? '' : 'Passwords do not match'
       if(!this.passLengthError && !this.passMatchError){
-        console.log(this.name);
-        console.log(this.surname);
-        console.log(this.email);
-        console.log(this.password);
-
-        const name = this.name;
-        const surname = this.surname;
-        const email = this.email;
-        const password = this.password;
-
         axios.post('/api/users/addUser',{
-          name,
-          surname,
-          email,
-          password
+          name: this.name,
+          surname: this.surname,
+          email: this.email,
+          password: this.password
         })
         .then((response) => {
           alert(response.data + ". Redirecting to Login Page");
