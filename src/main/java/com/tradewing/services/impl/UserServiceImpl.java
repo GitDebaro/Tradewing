@@ -3,6 +3,7 @@ package com.tradewing.services.impl;
 import com.tradewing.models.UserEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
+import lombok.RequiredArgsConstructor;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -18,16 +19,13 @@ import javax.crypto.SecretKey;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepo usrRepo;
 
 	@Value("${my.secret.jwt}")
     private String jwtSecret;
-
-	public UserServiceImpl(UserRepo usrRepo) {
-        this.usrRepo = usrRepo;
-    }
 
 	@Override
 	public List<UserEntity> getAllUsers(){
