@@ -13,7 +13,7 @@ const router = createRouter({
     {path: '/login', name: 'login', component: LoginPage},
     {path: '/register', name: 'register', component: RegisterPage},
     //Guarded pages
-    {path: '/guarded', redirect: '/dashboard', beforeEnter: [isAuthenticated],children: [
+    {path: '/guarded', redirect: '/dashboard',component: () => import('../components/layouts/GuardedLayout.vue'), beforeEnter: [isAuthenticated],children: [
       {path: '/dashboard', name: 'dashboard', component: () => import ('../components/DashboardPage.vue')},
       {path: '/profile', name: 'profile', component: () => import ('../components/ProfilePage.vue')}
     ]},

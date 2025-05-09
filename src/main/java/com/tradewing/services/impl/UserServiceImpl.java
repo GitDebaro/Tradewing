@@ -9,10 +9,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
+import com.tradewing.dto.UserInfo;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,5 +88,27 @@ public class UserServiceImpl implements UserService {
         System.out.println("[LOGIN]: Token generado: " + token);
         return token;
     }
+
+	public UserInfo getUserData(String token){
+		try{
+			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+
+			if(currentUser == null)
+				return null;
+
+			return UserInfo.builder()
+					.name(currentUser.getName())
+					.surname(currentUser.getSurname())
+					.email(currentUser.getEmail())
+					.image(currentUser.getImage())
+					.build();
+		}
+		catch(Exception e){
+			System.out.println("[PROFILE] Could not get claims from token");
+			return null;
+		}
+	}
 
 }

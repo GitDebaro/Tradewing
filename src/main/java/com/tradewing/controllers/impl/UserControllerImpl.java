@@ -3,6 +3,7 @@ package com.tradewing.controllers.impl;
 import com.tradewing.controllers.UserController;
 import com.tradewing.dto.LoginRequest;
 import com.tradewing.dto.LoginResponse;
+import com.tradewing.dto.UserInfo;
 import com.tradewing.models.UserEntity;
 import com.tradewing.services.UserService;
 import lombok.AllArgsConstructor;
@@ -53,4 +54,13 @@ public class UserControllerImpl implements UserController {
 		}
 	}
 
+	@Override
+	@PostMapping("/data")
+	public ResponseEntity<UserInfo> getUserData(@RequestBody LoginResponse userToken){
+		UserInfo info = userSC.getUserData(userToken.getToken());
+		if(info != null)
+			return ResponseEntity.ok(userSC.getUserData(userToken.getToken()));
+		else
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+	}
 }
