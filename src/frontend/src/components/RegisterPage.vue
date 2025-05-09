@@ -59,7 +59,7 @@ export default{
         })
         .then((response) => {
           alert(response.data + ". Redirecting to Login Page");
-          router.push('login');
+          router.push('/login');
         })
         .catch((error) => {
           alert(error.response.data);
