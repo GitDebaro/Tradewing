@@ -1,64 +1,3 @@
-const loginUser = async (email, password) => {
-  const datos = {};
-  datos.email = email;
-  datos.password = password;
-
-  const response = await fetch(`/api/tradeWing/users/email`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(datos),
-    'credentials': 'include'
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response;
-}
-
-const registerUser = async (data) => {
-
-  const user = {
-    nombre: data.get('name'),
-    apellidos: data.get('surname'),
-    email: data.get('loginEmail'),
-    password: data.get('loginPassword')
-  }
-
-  return fetch('/api/tradeWing/users/register', {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user),
-    credentials: "include"
-  });
-};
-
-const logoutUser = async () => {
-  return fetch('/api/tradeWing/users/logout', {
-    method: 'GET',
-    credentials: 'include'
-  });
-};
-
-const getUserInfo = async () => {
-  return fetch('/api/tradeWing/users/info', {
-    method: 'GET',
-    credentials: 'include'
-  });
-};
-
-const updateUser = async (data) => {
-  return fetch('/api/tradeWing/users/info', {
-    method: 'PUT',
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data),
-    credentials: 'include'
-  });
-}
-
 const buscarArticulo = async (name) => {
 
   const datos = {};
@@ -80,6 +19,7 @@ const buscarArticulo = async (name) => {
 
 };
 
+//DEPRECATED
 const insertarArticulo = async (data) => {
 
   const art = {
@@ -103,6 +43,7 @@ const insertarArticulo = async (data) => {
 
 }
 
+//DEPRECATED
 const eliminarArticulo = async (name) => {
   const art = {
     name: name
@@ -129,26 +70,6 @@ const eliminarArticulo = async (name) => {
   }
 };
 
-
-
-
-const obtenerInventario = async () => {
-
-  const response = await fetch(`/api/tradeWing/dashboard/articulo/inventario`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    'credentials': 'include'
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
-  }
-
-  return response;
-}
-
-export { loginUser, registerUser, logoutUser, getUserInfo, updateUser, buscarArticulo, insertarArticulo, obtenerInventario, eliminarArticulo };
+export { buscarArticulo, insertarArticulo, eliminarArticulo };
 
 console.log("Modulo API cargado");

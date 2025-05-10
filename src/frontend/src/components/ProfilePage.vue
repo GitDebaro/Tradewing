@@ -1,5 +1,5 @@
 <template>
-    <div class="p-4 max-w-4xl mx-auto">
+    <div class="p-4 max-w-7xl mx-auto">
         <UserInfo />
         <div class="p-4">
             <div class="flex justify-center mb-4">
@@ -10,7 +10,7 @@
             </div>
     
             <div> 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"> <!--check if its useful-->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> <!--check if its useful-->
                     <SaleProducts v-if="tab === 'sale'" />
                     <PurchasedProducts v-else />
                 </div>

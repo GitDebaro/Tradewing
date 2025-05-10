@@ -42,44 +42,7 @@ function crearTarjetaProducto(producto) {
     // Obtener el elemento para mostrar detalles adicionales
     const elementoDetalles = document.getElementById('detalles');
 
-    // Añadir evento al pasar el ratón sobre el botón para mostrar detalles
-    /*
-    botonArticulo.addEventListener('mouseenter', () => {
-        // Limpiar los detalles anteriores
-        elementoDetalles.innerHTML = '';
-        elementoDetalles.style.display = 'block';
-        // Añadir los detalles del producto
-        const detallesTitulo = document.createElement('h2');
-        detallesTitulo.innerText = producto.name;
-        elementoDetalles.appendChild(detallesTitulo);
 
-
-        const detallesImagen = document.createElement('img');
-        detallesImagen.src = producto.image.hires;
-        elementoDetalles.appendChild(detallesImagen);
-
-
-        const detallesDescripcion = document.createElement('p');
-        detallesDescripcion.innerText = `Descripción: ${producto.descripcion}`;
-        elementoDetalles.appendChild(detallesDescripcion);
-
-        const detallesPrecio = document.createElement('p');
-        detallesPrecio.innerText = `Precio: ${producto.precio}€`;
-        elementoDetalles.appendChild(detallesPrecio);
-
-        const detallesVendedor = document.createElement('p');
-        detallesVendedor.innerText = `Vendedor: ${producto.vendedor}`;
-        elementoDetalles.appendChild(detallesVendedor);
-
-
-    });
-    
-    // Añadir evento al quitar el ratón del botón para ocultar detalles
-    botonArticulo.addEventListener('mouseleave', () => {
-        elementoDetalles.innerText = '';
-
-    });
-    */
 
     // Añadir evento de añadir al carrito
     botonArticulo.addEventListener('click', () => {

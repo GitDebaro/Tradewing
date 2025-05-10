@@ -1,7 +1,34 @@
 <template>
-    <ProductCard />
-    <ProductCard />
-    <ProductCard />
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
+    <ProductCard :product="{
+  name: 'Basic Tee',
+  image: 'https://tailwindcss.com/plus-assets/img/ecommerce-images/product-page-01-related-product-01.jpg',
+  price: 35
+}"/>
 </template>
 
 <script setup>

@@ -15,9 +15,9 @@ const router = createRouter({
     //Guarded pages
     {path: '/guarded', redirect: '/dashboard',component: () => import('../components/layouts/GuardedLayout.vue'), beforeEnter: [isAuthenticated],children: [
       {path: '/dashboard', name: 'dashboard', component: () => import ('../components/DashboardPage.vue')},
-      {path: '/profile', name: 'profile', component: () => import ('../components/ProfilePage.vue')}
+      {path: '/profile', name: 'profile', component: () => import ('../components/ProfilePage.vue')},
+      {path: '/product/:id', component: () => import('../components/products/ProductDetails.vue')}
     ]},
-    //path product/:id
 
     //404
     {path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound}
