@@ -3,6 +3,11 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.tradewing.models.ProductEntity;
+
+import java.util.List;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 
 @Entity
 @Table(name = "users")
@@ -27,6 +32,10 @@ public class UserEntity {
     private String password;
 
     private String image;
+
+    @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<ProductEntity> products;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
