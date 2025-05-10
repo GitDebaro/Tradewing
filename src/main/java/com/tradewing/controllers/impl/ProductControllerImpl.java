@@ -35,4 +35,10 @@ public class ProductControllerImpl implements ProductController {
 		productSC.addProduct(product);
 	}
 
+	@Override
+	@GetMapping("")
+    public List<ProductEntity> getAllProducts(){
+		return productSC.getAllProducts();
+	}
+
 }

@@ -17,6 +17,9 @@ public interface ProductController {
 
     @PostMapping("/addProduct")
     void addProduct(@RequestBody ProductEntity product);
+
+    @GetMapping("")
+    List<ProductEntity> getAllProducts();	
     
 
 }

@@ -16,12 +16,18 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List<ProductEntity> getProductsByName(String name){
-		return productRepo.findByName(name);
+		return productRepo.findByNameContainingIgnoreCase(name);
 	}
 
 	@Override
 	public void addProduct(ProductEntity product){
 		productRepo.save(product);
 	}
+
+	@Override
+	public List<ProductEntity> getAllProducts(){
+		return productRepo.findAll();
+	}
+
 
 }

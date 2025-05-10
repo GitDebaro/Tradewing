@@ -3,6 +3,12 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.tradewing.models.UserEntity;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import java.util.List;
+
 
 @Entity
 @Table(name = "products")
@@ -20,8 +26,10 @@ public class ProductEntity {
     @Column(nullable = false)
     private Long price;
 
-    @Column(nullable = false, unique = true)
-    private String vendedor;
+    @ManyToOne
+    @JoinColumn(name = "vendedor")
+    @JsonBackReference
+    private UserEntity vendedor;
 
     @Column(nullable = false, length = 500)
     private String description;
