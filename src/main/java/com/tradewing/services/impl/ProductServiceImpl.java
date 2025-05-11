@@ -1,6 +1,7 @@
 package com.tradewing.services.impl;
 
 import com.tradewing.models.ProductEntity;
+import com.tradewing.models.UserEntity;
 import com.tradewing.repos.ProductRepo;
 import com.tradewing.services.ProductService;
 import lombok.AllArgsConstructor;
@@ -29,5 +30,8 @@ public class ProductServiceImpl implements ProductService {
 		return productRepo.findAll();
 	}
 
-
+	@Override
+	public List<ProductEntity> findBySeller(UserEntity seller){
+		return productRepo.findByVendedor(seller);
+	}
 }

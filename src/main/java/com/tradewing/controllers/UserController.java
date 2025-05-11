@@ -1,8 +1,9 @@
 package com.tradewing.controllers;
 
 import com.tradewing.models.UserEntity;
+import com.tradewing.models.ProductEntity;
 import com.tradewing.dto.LoginRequest;
-import com.tradewing.dto.LoginResponse;
+import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UserInfo;
 
 import org.springframework.http.ResponseEntity;
@@ -24,8 +25,11 @@ public interface UserController {
     ResponseEntity<?> addUser(@RequestBody UserEntity user);
 
     @PostMapping("/loginUser")
-    ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request); 
+    ResponseEntity<TokenCredential> login(@RequestBody LoginRequest request); 
     
     @PostMapping("/data")
-    ResponseEntity<UserInfo> getUserData(@RequestBody LoginResponse userToken);
+    ResponseEntity<UserInfo> getUserData(@RequestBody TokenCredential userToken);
+
+    @PostMapping("/my-inventory")
+    List<ProductEntity> getMyInventory(@RequestBody TokenCredential userToken);
 }

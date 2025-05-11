@@ -4,6 +4,6 @@ import lombok.*;
 
 @Getter
 @AllArgsConstructor
-public class LoginResponse {
+public class TokenCredential {
     private String token;
 }
