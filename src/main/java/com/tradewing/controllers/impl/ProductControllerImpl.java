@@ -36,6 +36,12 @@ public class ProductControllerImpl implements ProductController {
 	}
 
 	@Override
+	@PostMapping("/removeProduct")
+	public void removeProduct(@RequestBody ProductEntity product){
+		productSC.removeProduct(product);
+	}
+
+	@Override
 	@GetMapping("")
     public List<ProductEntity> getAllProducts(){
 		return productSC.getAllProducts();

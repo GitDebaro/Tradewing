@@ -80,28 +80,6 @@ const buscarArticulo = async (name) => {
 
 };
 
-const insertarArticulo = async (data) => {
-
-  const art = {
-    name: data.get('name'),
-    precio: data.get('precio'),
-    imagen: {
-      hires: data.get('imagen')
-    },
-    vendedor: data.get('vendedor'),
-    descripcion: data.get('descripcion')
-  }
-
-  console.log(art);
-
-  return fetch('/api/tradeWing/dashboard/articulo', {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(art),
-    credentials: "include"
-  });
-
-}
 
 const eliminarArticulo = async (name) => {
   const art = {

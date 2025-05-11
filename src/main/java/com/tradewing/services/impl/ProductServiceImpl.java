@@ -25,6 +25,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public void removeProduct(ProductEntity product){
+		productRepo.delete(product);
+	}
+
+	@Override
 	public List<ProductEntity> getAllProducts(){
 		return productRepo.findAll();
 	}

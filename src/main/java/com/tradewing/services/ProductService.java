@@ -9,6 +9,8 @@ public interface ProductService {
 
 	void addProduct(ProductEntity product);
 
+	void removeProduct(ProductEntity product);
+
 	List<ProductEntity> getAllProducts();
 
 
