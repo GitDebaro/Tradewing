@@ -10,7 +10,6 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name = "users")
-@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -36,6 +35,7 @@ public class UserEntity {
 
     @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
+    @ToString.Exclude
     private List<ProductEntity> products;
 
     @Column(name = "created_at")

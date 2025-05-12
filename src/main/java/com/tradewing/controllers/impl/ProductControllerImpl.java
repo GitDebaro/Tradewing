@@ -34,7 +34,7 @@ public class ProductControllerImpl implements ProductController {
 	@PostMapping("/addProduct")
 	public void addProduct(@RequestBody AddProductRequest product){
 		productSC.addProduct(product);
-		System.out.println("[PRODUCT]: Product added\n List of Products:");
+		System.out.println("[PRODUCT CONTROLLER]: Product added\n List of Products:");
 		System.out.println(productSC.getAllProducts());
 	}
 

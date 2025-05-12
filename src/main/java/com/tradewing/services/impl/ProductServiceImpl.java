@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 		try{
 			seller = usrp.findUserByEmail(product.getVendedor());
 		}catch(Exception e){
-			throw new RuntimeException("[ADDPRODUCT]: User not found");
+			throw new RuntimeException("[ADDPRODUCT SERVICE]: User not found");
 		}
 		ProductEntity p = new ProductEntity();
 		p.setName(product.getName());
@@ -38,13 +38,13 @@ public class ProductServiceImpl implements ProductService {
 		try{
 			price = Long.parseLong(product.getPrice());
 		}catch(NumberFormatException e){
-			throw new RuntimeException("Price not Long format");
+			throw new RuntimeException("[ADDPRODUCT SERVICE] Price not Long format");
 		}
 		p.setPrice(price);
 		p.setImage(product.getImage());
 		p.setDescription(product.getDescription());
 		p.setVendedor(seller);
-		System.out.println("[ADDPRODUCT]: Product successfully added from profile");
+		System.out.println("[ADDPRODUCT SERVICE]: Product successfully added from profile");
 		productRepo.save(p);
 	}
 

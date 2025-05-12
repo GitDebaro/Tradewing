@@ -19,11 +19,12 @@ public class ProductEntity {
     private String name;
 
     @Column(nullable = false)
-    private Long price;
+    private Long price; 
 
     @ManyToOne
     @JoinColumn(name = "vendedor")
     @JsonBackReference
+    @ToString.Exclude //que no haya un bucle entre product y user
     private UserEntity vendedor;
 
     @Column(nullable = false, length = 500)

@@ -20,25 +20,25 @@ function uploadProduct(){
             const decoded = jwtDecode(jwt);
             const seller = decoded.uss;
 
-            const formData = new FormData();
-            formData.append("name", String(name));
-            formData.append("price", String(price));
-            formData.append("description", String(description));
-            formData.append("image", String(image));
-            formData.append("email", String(seller));
-
             const response = await fetch("/api/products/addProduct", {
                 method: "POST",
                 headers: { 
+                    'Content-Type': 'application/json'
                 },
-                body: formData
+                body: JSON.stringify({
+                    name: String(name),
+                    price: String(price),
+                    description: String(description),
+                    image: String(image),
+                    email: String(seller)
+                })
             });
     
-            if (!response.ok) throw new Error("[PROFILE]: Error while uploading the product");
+            if (!response.ok) throw new Error("[PROFILE MJS]: Error while uploading the product");
     
-            const result = await response.json();
-            console.log("[PROFILE] Product added:", result);
-            alert("Product added correctly");
+            const result = await response;
+            console.log("[PROFILE MJS] Product added:", result);
+            alert("[PROFILE MJS] Product added correctly");
 
             document.getElementById("addArt").reset();
 
