@@ -1,6 +1,7 @@
 package com.tradewing.controllers.impl;
 
 import com.tradewing.controllers.ProductController;
+import com.tradewing.dto.AddProductRequest;
 import com.tradewing.models.ProductEntity;
 import com.tradewing.services.ProductService;
 import lombok.AllArgsConstructor;
@@ -31,14 +32,16 @@ public class ProductControllerImpl implements ProductController {
 
 	@Override
 	@PostMapping("/addProduct")
-	public void addProduct(@RequestBody ProductEntity product){
+	public void addProduct(@RequestBody AddProductRequest product){
 		productSC.addProduct(product);
+		System.out.println("[PRODUCT]: Product added\n List of Products:");
+		System.out.println(productSC.getAllProducts());
 	}
 
 	@Override
 	@PostMapping("/removeProduct")
 	public void removeProduct(@RequestBody ProductEntity product){
-		productSC.removeProduct(product);
+		//productSC.removeProduct(product);
 	}
 
 	@Override

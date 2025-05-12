@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import com.tradewing.models.UserEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +13,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.SecretKey;
 
@@ -43,7 +40,7 @@ public class UserServiceImpl implements UserService {
 		String hashedPass = DigestUtils.sha256Hex(user.getPassword());
 		user.setPassword(hashedPass);
 		try{
-			UserEntity newUser = usrRepo.save(user);
+				usrRepo.save(user);
 				System.out.println("[REGISTER][SUCCESS] User created");
 				return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
 		}

@@ -127,6 +127,6 @@ const obtenerInventario = async () => {
   return response;
 }
 
-export { loginUser, registerUser, logoutUser, getUserInfo, updateUser, buscarArticulo, insertarArticulo, obtenerInventario, eliminarArticulo };
+export { loginUser, registerUser, logoutUser, getUserInfo, updateUser, buscarArticulo, obtenerInventario, eliminarArticulo };
 
 console.log("Modulo API cargado");

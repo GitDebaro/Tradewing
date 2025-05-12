@@ -3,12 +3,7 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.tradewing.models.UserEntity;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
-import java.util.List;
-
 
 @Entity
 @Table(name = "products")

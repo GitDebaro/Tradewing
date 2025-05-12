@@ -3,7 +3,6 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.tradewing.models.ProductEntity;
 
 import java.util.List;
 import com.fasterxml.jackson.annotation.JsonManagedReference;

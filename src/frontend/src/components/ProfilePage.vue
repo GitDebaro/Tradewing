@@ -4,17 +4,18 @@
     <router-link to="/">Logout</router-link>
     <div class="form-container">
       <h2>Añadir artículo</h2>
-      <form id="addArt" @submit.prevent="uploadProduct">
-        <input type="text" name="name" placeholder="Nombre" required>
-        <input type="text" name="precio" placeholder="Precio" required>
-        <input type="text" name="imagen" placeholder="Imagen del artículo"> 
-        <input type="textarea" name="descripcion" placeholder="Descripcion" required>
+      <form id="addArt" @submit.prevent="handleUpload">
+        <input type="text" id="name" placeholder="Nombre" required>
+        <input type="text" id="price" placeholder="Precio" required>
+        <input type="text" id="image" placeholder="Imagen del artículo"> 
+        <input type="textarea" id="description" placeholder="Descripcion" required>
         <button type="submit" id="anadir-articulo">Enviar</button>
       </form>
     </div>
 </template>
 
 <script setup>
+import {uploadProduct} from "../assets/profile.mjs";
 
-const { uploadProduct } = useSearch()
+const handleUpload = uploadProduct();
 </script>

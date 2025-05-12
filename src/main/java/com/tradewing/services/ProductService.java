@@ -1,5 +1,6 @@
 package com.tradewing.services;
 
+import com.tradewing.dto.AddProductRequest;
 import com.tradewing.models.ProductEntity;
 import java.util.List;
 
@@ -7,9 +8,9 @@ public interface ProductService {
 
 	List<ProductEntity> getProductsByName(String name);
 
-	void addProduct(ProductEntity product);
+	void addProduct(AddProductRequest product);
 
-	void removeProduct(ProductEntity product);
+	void removeProduct(AddProductRequest product);
 
 	List<ProductEntity> getAllProducts();
 

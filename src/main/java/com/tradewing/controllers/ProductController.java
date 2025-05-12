@@ -1,5 +1,6 @@
 package com.tradewing.controllers;
 
+import com.tradewing.dto.AddProductRequest;
 import com.tradewing.models.ProductEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ public interface ProductController {
     List<ProductEntity> getProductsByName(@RequestParam String name);	
 
     @PostMapping("/addProduct")
-    void addProduct(@RequestBody ProductEntity product);
+    void addProduct(@RequestBody AddProductRequest product);
 
     @PostMapping("/removeProduct")
     void removeProduct(@RequestBody ProductEntity product);
