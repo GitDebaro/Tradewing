@@ -3,16 +3,20 @@ package com.tradewing.services.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import com.tradewing.models.UserEntity;
+import com.tradewing.models.ProductEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
+import com.tradewing.services.ProductService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
+import com.tradewing.dto.UserInfo;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Claims;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +32,7 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepo usrRepo;
+	private final ProductService productSC;
 
 	@Value("${my.secret.jwt}")
     private String jwtSecret;
@@ -87,4 +92,44 @@ public class UserServiceImpl implements UserService {
         return token;
     }
 
+	public UserInfo getUserData(String token){
+		try{
+			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+
+			if(currentUser == null)
+				return null;
+
+			return UserInfo.builder()
+					.name(currentUser.getName())
+					.surname(currentUser.getSurname())
+					.email(currentUser.getEmail())
+					.image(currentUser.getImage())
+					.build();
+		}
+		catch(Exception e){
+			System.out.println("[PROFILE][ERROR] Could not get claims from token");
+			return null;
+		}
+	}
+
+	public List<ProductEntity> getMyInventory(String token){
+		List<ProductEntity> inventory = new ArrayList<>();
+		try{
+
+			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+
+			if(currentUser == null)
+				return inventory;
+
+			return productSC.findBySeller(currentUser);
+		}
+		catch(Exception e){
+			System.out.println("[PROFILE][ERROR] Could not get claims from token");
+			return inventory;
+		}
+	}
 }

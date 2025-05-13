@@ -25,6 +25,8 @@
 
 <script>
 import axios from 'axios';
+import router from '../router';
+
 export default {
   data() {
     return {
@@ -40,41 +42,17 @@ export default {
           password: this.password
         })
         .then((response) =>{
-          localStorage.setItem('jwt', response.data.token);
+          this.loginError = '';
+          localStorage.setItem('token', response.data.token);
           console.log('[LOGINPAGE] Successful login: ', response.data.token);
-          this.$router.push('/dashboard');
+
+          const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
+          router.replace(lastPath);
         })
         .catch((error) => {
           console.log(error)
           this.loginError = 'Login failed. Please check your credentials.';
         })
-
-/*
-      try {
-          const response = await fetch('/api/users/loginUser', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              email: this.email,
-              password: this.password
-            })
-        });
-
-        if (!response.ok) {
-          throw new Error('Login failed');
-        }
-
-        const data = await response.json();
-        localStorage.setItem('jwt', data.token);
-        console.log('[LOGINPAGE] Successful login: ',data.token);
-        this.$router.push('/dashboard');
-
-      } catch (err) {
-        this.loginError = 'Login failed. Please check your credentials.';
-      }
-        */
     }
   }
 }
