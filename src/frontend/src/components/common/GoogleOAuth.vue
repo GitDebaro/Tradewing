@@ -7,13 +7,11 @@ import { onMounted, ref } from 'vue';
 import axios from 'axios';
 import router from '../../router';
 
-const clientId = process.env.VUE_APP_GOOGLE_CLIENT_ID;
-console.log(clientId);
 const googleBtn = ref(null);
 
 onMounted(() => {
     window.google.accounts.id.initialize({
-        client_id: clientId,
+        client_id: '1088557608321-ooa1hg0026vmuehnmutkl89u6tf6oq70.apps.googleusercontent.com',
         callback: handleCredentialResponse
     })
 
