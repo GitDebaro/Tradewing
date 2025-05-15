@@ -24,7 +24,6 @@ public class UserEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String surname;
 
     @Column(nullable = false, unique = true)

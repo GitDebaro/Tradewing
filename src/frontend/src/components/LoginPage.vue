@@ -14,6 +14,14 @@
         Sign in
       </button>
     </form>
+    <div class="flex items-center my-4 justify-center">
+      <div class="w-2/5 h-px bg-gray-300"></div>
+      <span class="px-2 text-sm text-gray-500">or</span>
+      <div class="w-2/5 h-px bg-gray-300"></div>
+    </div>
+    <div class="flex justify-center w-full">
+      <GoogleOAuth />
+    </div>
     <div class="text-center mt-4">
         <p class="text-sm text-gray-500">You dont have an account? 
           <router-link to="/register" class="text-blue-600 hover:text-blue-700">Sign up</router-link>
@@ -26,6 +34,7 @@
 <script>
 import axios from 'axios';
 import router from '../router';
+import GoogleOAuth from './common/GoogleOAuth.vue';
 
 export default {
   data() {
@@ -54,6 +63,9 @@ export default {
           this.loginError = 'Login failed. Please check your credentials.';
         })
     }
+  },
+  components: {
+    GoogleOAuth
   }
 }
 </script>
