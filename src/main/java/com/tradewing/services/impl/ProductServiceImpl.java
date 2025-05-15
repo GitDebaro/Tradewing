@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @AllArgsConstructor
@@ -19,6 +21,12 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductEntity> getProductsByName(String name){
 		return productRepo.findByNameContainingIgnoreCase(name);
 	}
+
+	@Override
+	public Optional<ProductEntity> getProductsById(Long id){
+		return productRepo.findById(id);
+	}
+
 
 	@Override
 	public void addProduct(ProductEntity product){

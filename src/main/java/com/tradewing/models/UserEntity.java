@@ -6,7 +6,8 @@ import java.time.LocalDateTime;
 import com.tradewing.models.ProductEntity;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 @Entity
@@ -36,7 +37,6 @@ public class UserEntity {
     private String image = "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png";
 
     @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<ProductEntity> products;
 
     @Column(name = "created_at")

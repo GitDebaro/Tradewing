@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import com.tradewing.models.UserEntity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class ProductEntity {
 
     @ManyToOne
     @JoinColumn(name = "vendedor")
-    @JsonBackReference
+    @JsonIgnoreProperties({"products", "password"})
     private UserEntity vendedor;
 
     @Column(nullable = false, length = 500)
