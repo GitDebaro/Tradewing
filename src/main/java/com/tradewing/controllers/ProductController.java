@@ -21,7 +21,7 @@ public interface ProductController {
     void addProduct(@RequestBody AddProductRequest product, @RequestHeader("Authorization") String authHeader);
 
     @PostMapping("/removeProduct")
-    void removeProduct(@RequestBody ProductEntity product);
+    void removeProduct(@RequestBody ProductEntity product, @RequestHeader("Authorization") String authHeader);
 
     @GetMapping("")
     List<ProductEntity> getAllProducts();	

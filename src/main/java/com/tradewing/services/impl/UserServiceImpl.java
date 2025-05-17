@@ -7,7 +7,6 @@ import com.tradewing.models.ProductEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
 import com.tradewing.services.ProductService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
@@ -93,7 +92,7 @@ public class UserServiceImpl implements UserService {
 	public UserInfo getUserData(String token){
 		try{
 			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
 
 			if(currentUser == null)
@@ -117,7 +116,7 @@ public class UserServiceImpl implements UserService {
 		try{
 
 			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
 
 			if(currentUser == null)

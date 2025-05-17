@@ -74,8 +74,28 @@ public class ProductServiceImpl implements ProductService {
 		productRepo.save(p);
 	}
 
-	public void removeProduct(AddProductRequest product){
-		System.out.println("RemoveProduct");
+	public void removeProduct(AddProductRequest product, String token){
+		UserEntity seller;
+		Claims claims = Jwts.parserBuilder()
+						.setSigningKey(getSigningKey())
+						.build()
+						.parseClaimsJws(token)
+						.getBody();
+		String email = claims.getIssuer();
+		Date expiration = claims.getExpiration();
+		Date now = new Date();
+		if(expiration.before(now)){
+			throw new RuntimeException("[REMOVEPRODUCT SERVICE]: Token is expired");
+		}
+		try{
+			seller = usrp.findUserByEmail(email);
+		}catch(Exception e){
+			throw new RuntimeException("[ADDPRODUCT SERVICE]: User not found");
+		}
+		List <ProductEntity> listaProd = findBySeller(seller);
+		for (int i=0; i<listaProd.size();i++){
+			
+		}
 	}
 
 	@Override

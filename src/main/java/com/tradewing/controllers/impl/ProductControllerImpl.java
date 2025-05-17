@@ -36,13 +36,13 @@ public class ProductControllerImpl implements ProductController {
 	public void addProduct(@RequestBody AddProductRequest product, @RequestHeader("Authorization") String authHeather){
 		String token = authHeather.replace("Bearer","");
 		productSC.addProduct(product,token);
-		System.out.println("[PRODUCT CONTROLLER]: Product added\n List of Products:");
-		System.out.println(productSC.getAllProducts());
+		System.out.println("[PRODUCT CONTROLLER]: Product added\n");
 	}
 
 	@Override
 	@PostMapping("/removeProduct")
-	public void removeProduct(@RequestBody ProductEntity product){
+	public void removeProduct(@RequestBody ProductEntity product, @RequestHeader("Authorization") String authHeather){
+		String token = authHeather.replace("Bearer","");
 		//productSC.removeProduct(product);
 	}
 

@@ -11,7 +11,7 @@ public interface ProductService {
 
 	void addProduct(AddProductRequest product,String token);
 
-	void removeProduct(AddProductRequest product);
+	void removeProduct(AddProductRequest product, String token);
 
 	List<ProductEntity> getAllProducts();
 
