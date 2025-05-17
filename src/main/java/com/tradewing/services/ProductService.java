@@ -8,7 +8,7 @@ public interface ProductService {
 
 	List<ProductEntity> getProductsByName(String name);
 
-	void addProduct(AddProductRequest product);
+	void addProduct(AddProductRequest product,String token);
 
 	void removeProduct(AddProductRequest product);
 

@@ -1,7 +1,5 @@
 
-import {jwtDecode} from 'jwt-decode'
-
-//get jwt so we can know which user is going to upload an article
+import axios from 'axios';
 
 //====================================================================================
 function uploadProduct(){
@@ -17,26 +15,21 @@ function uploadProduct(){
             const jwt = localStorage.getItem('jwt');
             if (!jwt) throw new Error("JWT not found");
 
-            const decoded = jwtDecode(jwt);
-            const seller = decoded.uss;
-
-            const response = await fetch("/api/products/addProduct", {
-                method: "POST",
-                headers: { 
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: String(name),
-                    price: String(price),
-                    description: String(description),
-                    image: String(image),
-                    email: String(seller)
-                })
+            const response = await axios.post("/api/products/addProduct", {
+                name: String(name),
+                price: String(price),
+                description: String(description),
+                image: String(image),
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`
+                }
             });
     
-            if (!response.ok) throw new Error("[PROFILE MJS]: Error while uploading the product");
+            if (!response || response.status != 200) throw new Error("[PROFILE MJS]: Error while uploading the product");
     
-            const result = await response;
+            const result = response;
             console.log("[PROFILE MJS] Product added:", result);
             alert("[PROFILE MJS] Product added correctly");
 

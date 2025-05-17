@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -32,8 +33,9 @@ public class ProductControllerImpl implements ProductController {
 
 	@Override
 	@PostMapping("/addProduct")
-	public void addProduct(@RequestBody AddProductRequest product){
-		productSC.addProduct(product);
+	public void addProduct(@RequestBody AddProductRequest product, @RequestHeader("Authorization") String authHeather){
+		String token = authHeather.replace("Bearer","");
+		productSC.addProduct(product,token);
 		System.out.println("[PRODUCT CONTROLLER]: Product added\n List of Products:");
 		System.out.println(productSC.getAllProducts());
 	}
