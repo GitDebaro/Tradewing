@@ -86,4 +86,9 @@ public class ProductServiceImpl implements ProductService {
 	private SecretKey getSigningKey() {
     	return Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
+		
+	@Override
+	public List<ProductEntity> findBySeller(UserEntity seller){
+		return productRepo.findByVendedor(seller);
+	}
 }

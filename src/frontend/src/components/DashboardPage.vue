@@ -1,75 +1,66 @@
 <template>
-    <style scoped src="../assets/css/dashboardStyle.css"></style>
-    
-    <!DOCTYPE html>
-    <html lang="es">
-
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TradeWing - Dashboard</title>
-    <link rel="icon" type="image/png" sizes="64x64" href="../assets/logo.png">
-    <link rel="stylesheet" href="../assets/tailwind.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
-    
-
-    </head>
-
-    <body>
-    <main class="container">
-        <div class="botones">
-        <router-link to="/profile"> <button id="botPerfil">Perfil</button></router-link>
-        <button id="logout">Cerrar Sesión</button>
-        </div>
-
-        <form @submit.prevent="handleSubmit" class="form" style="width: 100%">
-            <div class="busqueda-grid">
-            <input
-                type="text"
-                v-model="searchTerm"
-                id="name"
-                name="name"
-                placeholder="Nombre del artículo..."
-            />
-            <button type="submit" id="botonBuscar">Buscar</button>
+    <main class="p-2 max-w-8xl mx-auto">
+        <form @submit.prevent="handleSubmit" class="w-full">
+            <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2">
+                <input type="text" v-model="searchTerm" id="name" name="name" placeholder="Item Name..."
+                class="border border-gray-300 rounded-lg px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                <button type="submit" id="botonBuscar"
+                class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-semibold transition">Search</button>
             </div>
         </form>
 
-        <div class="pagina">
-            <section class="panel" id="catalogo">
-                <h1>Catálogo</h1>
-                <p>Busque un producto para empezar a comprar</p>
-                <div id="productos"></div>
-            </section>
-            <section class="panel" id="cesta">
-                <h1>Cesta</h1>
-                <div class="cesta">
-                <ul id="cesta-compra">
-                </ul>
+        <div class="grid grid-cols-[4fr_1fr] gap-4 my-4 w-full min-h-ful">
+            <section class="p-4 border border-gray-300 rounded-md flex flex-col flex-wrap gap-2 bg-blue-50" id="catalogo">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <ProductCard v-for="product in products" :key="product.id" :product="product"/>
                 </div>
-                <button @click="handlePagar">Finalizar Compra</button>
+            </section>
+            <!--Posibly deprecated and replaced with new funcionality-->
+            <section class="p-4 border border-gray-300 rounded-md bg-white" id="cesta">
+                <h1 class="text-2xl font-bold mb-2">Cesta</h1>
+                <div class="border rounded-md p-2 max-h-[400px] overflow-y-auto">
+                    <ul id="cesta-compra" class="list-disc pl-5 space-y-2"></ul>
+                </div>
+                <button @click="handlePagar"
+                class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-semibold transition">Purchase</button>
             </section>
         </div>
     </main>
-    </body>
-    </html>
-    <router-view/>
-    <router-link to="/profile">Profile</router-link>
 </template>
 
-<script setup>
-import { useSearch, handlePagar, cargarCatalogoAlIniciar } from '../assets/dashboard.mjs'
-
-const { searchTerm, handleSubmit } = useSearch()
-</script>
-
 <script>
- import('../assets/css/dashboardStyle.css');
- 
- export default {
-  name: 'DashboardPage',
+import axios from 'axios';
+import ProductCard from './products/ProductCard.vue'
+
+export default {
+  data() {
+    return {
+      products: [],
+       searchTerm: ''
+    }
+  },
+  components: {
+    ProductCard
+  },
+  methods: {
+    async getItemList(name){
+        axios.get('/api/products/search', {
+            params: { name }
+        })
+        .then(response => {
+            this.products = response.data;
+            console.log(this.products);
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    },
+    handleSubmit(){
+        this.getItemList(this.searchTerm);
+    }
+  },
   mounted() {
-    cargarCatalogoAlIniciar();
+    this.getItemList('');
   }
 }
 </script>

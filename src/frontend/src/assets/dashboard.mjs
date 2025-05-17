@@ -57,35 +57,7 @@ function handlePagar(event) {
   event.preventDefault()
   pagarYquitar()
 }
-/** 
-document.getElementById('botPerfil').addEventListener('click', (e) => {
-  e.preventDefault();
-  //Redirige a la persona al perfil
-  window.location.replace('/profile');
-});
 
-document.getElementById('logout').addEventListener('click', async (e) => {
-  e.preventDefault();
-  //Pedir al usuario confirmación
-  const opt = confirm("¿Desea cerrar sesión?");
-  if (!opt) {
-    return;
-  }
-
-  try {
-    const response = await rest_api.logoutUser();
-
-    console.log(response.status);
-    if (response.status !== 204) {
-      throw new Error("No se ha podido cerrar sesión.");
-    }
-
-    window.location.replace('/');
-  } catch (error) {
-    alert("Error al cerrar sesión");
-  }
-});
-*/
 //funcion para aniadir a la cesta un articulo
 export const addArticuloCarrito = (nombreArticulo) => {
   const nombreToLower = nombreArticulo.toLowerCase();
@@ -126,9 +98,8 @@ export const removeArticuloCarrito = (nombreArticulo) => {
   console.log(`El articulo "${nombreArticulo}" no está en la cesta.`);
 };
 
-
 // Función para cargar el catálogo al iniciar la página
-async function cargarCatalogoAlIniciar() {
+async function getItemList() {
   try {
     // Llama a la función 'buscarArticulo' del módulo 'rest_api' sin argumentos para obtener todos los artículos
     const response = await rest_api.buscarArticulo("");
@@ -145,7 +116,7 @@ async function cargarCatalogoAlIniciar() {
     // Muestra una alerta con el mensaje de error
     alert('Error al cargar el catálogo: ' + error.message);
   }
-}
+} 
 async function pagarYquitar() {
   const cesta = document.getElementById("cesta-compra");
   const articulosCesta = cesta.querySelectorAll("li");
@@ -186,6 +157,6 @@ async function eliminarArticuloBBDD(nombreArticulo) {
 
 
 
-export {useSearch, handlePagar, cargarCatalogoAlIniciar}
+export {useSearch, handlePagar, getItemList}
 // Imprime en la consola "Módulo dashboard cargado", indicando que el script se ha cargado correctamente.
 console.log("Módulo dashboard cargado");
