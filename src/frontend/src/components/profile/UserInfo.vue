@@ -1,6 +1,6 @@
 <template>
     <div v-if="user" class="flex items-center space-x-4 mb-6">
-        <img :src="user.image" alt="Foto de perfil" class="w-24 h-24 rounded-full object-cover bg-blue-500">
+        <img :src="user.image" alt="Foto de perfil" referrerpolicy="no-referrer" class="w-24 h-24 rounded-full object-cover bg-blue-500">
         <div>
           <h2 class="text-2xl font-semibold">{{ user.name }} {{user.surname}}</h2>
           <p class="text-gray-600">{{ user.email }}</p>
