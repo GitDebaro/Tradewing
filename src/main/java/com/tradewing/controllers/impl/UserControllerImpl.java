@@ -4,6 +4,7 @@ import com.tradewing.controllers.UserController;
 import com.tradewing.dto.LoginRequest;
 import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.UpdateUserPayload;
 import com.tradewing.models.UserEntity;
 import com.tradewing.models.ProductEntity;
 import com.tradewing.services.UserService;
@@ -69,5 +70,11 @@ public class UserControllerImpl implements UserController {
 	@PostMapping("my-inventory")
 	public List<ProductEntity> getMyInventory(@RequestBody TokenCredential userToken){
 		return userSC.getMyInventory(userToken.getToken());
+	}
+
+	@Override
+	@PostMapping("/update")
+	public ResponseEntity<UserInfo> updateUserData(@RequestBody UpdateUserPayload payload){
+		return userSC.updateUserData(payload);
 	}
 }

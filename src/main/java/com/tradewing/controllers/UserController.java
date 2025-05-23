@@ -5,6 +5,7 @@ import com.tradewing.models.ProductEntity;
 import com.tradewing.dto.LoginRequest;
 import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.UpdateUserPayload;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,4 +32,7 @@ public interface UserController {
 
     @PostMapping("/my-inventory")
     List<ProductEntity> getMyInventory(@RequestBody TokenCredential userToken);
+
+    @PostMapping("/update")
+    ResponseEntity<UserInfo> updateUserData(@RequestBody UpdateUserPayload payload);
 }
