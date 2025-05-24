@@ -46,7 +46,7 @@ export default {
   },
   methods:{
     deleteProd(){
-        const confirmed = window.confirm("¿Estás seguro que quieres eliminar este producto?");
+        const confirmed = window.confirm("Are you sure you want to delete this product?");
         if (confirmed) {
             this.$emit('deleteProd', this.product.id);
         }

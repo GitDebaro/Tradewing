@@ -42,7 +42,7 @@ export default{
 
       } catch (err) {
         console.error('[SALEPRODUCT] Error al eliminar producto:', err);
-        alert('No se pudo eliminar el producto');
+        alert('Failed to delete a product');
       }
     }
   },

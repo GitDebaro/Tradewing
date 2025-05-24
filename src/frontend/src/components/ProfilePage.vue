@@ -1,16 +1,7 @@
 <template>
     <div class="p-4 max-w-7xl mx-auto">
         <UserInfo />
-        <div class="form-container">
-          <h2>Añadir artículo</h2>
-          <form id="addArt" @submit.prevent="handleUpload">
-            <input type="text" id="name" placeholder="Nombre" required>
-            <input type="text" id="price" placeholder="Precio" required>
-            <input type="text" id="image" placeholder="Imagen del artículo"> 
-            <input type="textarea" id="description" placeholder="Descripcion" required>
-            <button type="submit" id="anadir-articulo">Enviar</button>
-          </form>
-        </div>
+        <UploadProduct />
         <div class="p-4">
             <div class="flex justify-center mb-4">
                 <div class="inline-flex rounded-full border border-gray-300 overflow-hidden">
@@ -33,7 +24,7 @@
 import PurchasedProducts from './profile/PurchasedProducts.vue';
 import SaleProducts from './profile/SaleProducts.vue';
 import UserInfo from './profile/UserInfo.vue';
-import { uploadProduct } from '../assets/profile.mjs';
+import UploadProduct from './profile/UploadProduct.vue';
 
 export default {
   data() {
@@ -45,9 +36,7 @@ export default {
     PurchasedProducts,
     SaleProducts,
     UserInfo,
-  },
-  methods: {
-    handleUpload: uploadProduct()
+    UploadProduct
   }
 };
 </script>
