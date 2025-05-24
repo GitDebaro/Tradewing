@@ -1,10 +1,10 @@
 <template>
-<ProductCard v-for="product in inventory" :key="product.id" :product="product"/>
+<ProductCardProfile v-for="product in inventory" :key="product.id" :product="product" @deleteProd="handleDelete"/>
 </template>
 
 <script>
 import axios from 'axios';
-import ProductCard from '../products/ProductCard.vue';
+import ProductCardProfile from '../products/ProductCardProfile.vue';
 
 export default{
   data() {
@@ -23,13 +23,34 @@ export default{
       .catch(error => {
         console.error('Inventory error:', error.response?.data || error.message);
       });
+    },
+    async handleDelete(productId) {
+      try {
+        const jwt = localStorage.getItem('token');
+        if (!jwt) throw new Error('JWT no encontrado');
+
+        await axios.delete(`/api/products/removeProduct`, {
+          params: {
+            productId
+          },
+          headers: {
+            Authorization: `Bearer ${jwt}`
+          }
+        });
+
+        location.reload();
+
+      } catch (err) {
+        console.error('[SALEPRODUCT] Error al eliminar producto:', err);
+        alert('Failed to delete a product');
+      }
     }
   },
   mounted() {
     this.fetchMyInventory();
   },
   components: {
-    ProductCard
+    ProductCardProfile
   }
 }
 </script>

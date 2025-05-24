@@ -1,6 +1,7 @@
 <template>
     <div class="p-4 max-w-7xl mx-auto">
         <UserInfo />
+        <UploadProduct />
         <div class="p-4">
             <div class="flex justify-center mb-4">
                 <div class="inline-flex rounded-full border border-gray-300 overflow-hidden">
@@ -23,6 +24,7 @@
 import PurchasedProducts from './profile/PurchasedProducts.vue';
 import SaleProducts from './profile/SaleProducts.vue';
 import UserInfo from './profile/UserInfo.vue';
+import UploadProduct from './profile/UploadProduct.vue';
 
 export default {
   data() {
@@ -34,6 +36,7 @@ export default {
     PurchasedProducts,
     SaleProducts,
     UserInfo,
-  },
+    UploadProduct
+  }
 };
 </script>
