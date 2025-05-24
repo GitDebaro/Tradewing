@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 
 @Entity
@@ -22,7 +23,6 @@ public class UserEntity {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String surname;
 
     @Column(nullable = false, unique = true)
@@ -34,8 +34,6 @@ public class UserEntity {
     private String image = "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png";
 
     @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
-    @ToString.Exclude
     private List<ProductEntity> products;
 
     @Column(name = "created_at")

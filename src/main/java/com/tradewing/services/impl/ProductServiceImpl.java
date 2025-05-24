@@ -98,6 +98,9 @@ public class ProductServiceImpl implements ProductService {
 		productRepo.delete(rproduct.get());
 		System.out.println("[REMOVEPRODUCT SERVICE]: Product: " + rproduct.get().getName() + " removed successfully.");
 
+	@Override
+	public Optional<ProductEntity> getProductsById(Long id){
+		return productRepo.findById(id);
 	}
 
 	@Override

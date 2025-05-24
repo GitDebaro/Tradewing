@@ -3,7 +3,13 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+<<<<<<< HEAD
 import com.fasterxml.jackson.annotation.JsonBackReference;
+=======
+import com.tradewing.models.UserEntity;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+>>>>>>> dev
 
 @Entity
 @Table(name = "products")
@@ -23,8 +29,7 @@ public class ProductEntity {
 
     @ManyToOne
     @JoinColumn(name = "vendedor")
-    @JsonBackReference
-    @ToString.Exclude //que no haya un bucle entre product y user
+    @JsonIgnoreProperties({"products", "password"})
     private UserEntity vendedor;
 
     @Column(nullable = false, length = 500)

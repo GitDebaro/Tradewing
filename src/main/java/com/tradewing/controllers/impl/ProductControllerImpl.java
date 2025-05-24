@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.ResponseEntity;
 
 
 
@@ -30,6 +31,14 @@ public class ProductControllerImpl implements ProductController {
 	@GetMapping("/search")
 	public List<ProductEntity> getProductsByName(@RequestParam String name){
 		return productSC.getProductsByName(name);
+	}
+
+	@Override
+	@GetMapping("/searchId")
+    public ResponseEntity<ProductEntity> getProductsById(@RequestParam Long id){
+		return productSC.getProductsById(id)
+		.map(ResponseEntity::ok)
+        .orElse(ResponseEntity.notFound().build());
 	}
 
 	@Override

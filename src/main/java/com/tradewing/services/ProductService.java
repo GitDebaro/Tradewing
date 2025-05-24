@@ -4,6 +4,7 @@ import com.tradewing.dto.AddProductRequest;
 import com.tradewing.models.ProductEntity;
 import com.tradewing.models.UserEntity;
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductService {
 
@@ -12,6 +13,8 @@ public interface ProductService {
 	void addProduct(AddProductRequest product,String token);
 
 	void removeProduct(Long product, String token);
+	
+	Optional<ProductEntity> getProductsById(Long id);
 
 	List<ProductEntity> getAllProducts();
 
