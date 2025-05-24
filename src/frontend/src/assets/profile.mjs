@@ -12,7 +12,7 @@ function uploadProduct(){
             const description = document.getElementById("description").value;
             const image = document.getElementById("image").value;
 
-            const jwt = localStorage.getItem('jwt');
+            const jwt = localStorage.getItem('token');
             if (!jwt) throw new Error("JWT not found");
 
             const response = await axios.post("/api/products/addProduct", {

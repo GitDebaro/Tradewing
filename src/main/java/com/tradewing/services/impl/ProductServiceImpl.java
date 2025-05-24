@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import javax.crypto.SecretKey;
 
@@ -74,8 +75,7 @@ public class ProductServiceImpl implements ProductService {
 		productRepo.save(p);
 	}
 
-	public void removeProduct(AddProductRequest product, String token){
-		UserEntity seller;
+	public void removeProduct(Long product, String token){
 		Claims claims = Jwts.parserBuilder()
 						.setSigningKey(getSigningKey())
 						.build()
@@ -88,14 +88,16 @@ public class ProductServiceImpl implements ProductService {
 			throw new RuntimeException("[REMOVEPRODUCT SERVICE]: Token is expired");
 		}
 		try{
-			seller = usrp.findUserByEmail(email);
+			usrp.findUserByEmail(email);
 		}catch(Exception e){
-			throw new RuntimeException("[ADDPRODUCT SERVICE]: User not found");
+			throw new RuntimeException("[REMOVEPRODUCT SERVICE]: User not found");
 		}
-		List <ProductEntity> listaProd = findBySeller(seller);
-		for (int i=0; i<listaProd.size();i++){
-			
-		}
+		
+		Optional<ProductEntity> rproduct = productRepo.findById(product);
+
+		productRepo.delete(rproduct.get());
+		System.out.println("[REMOVEPRODUCT SERVICE]: Product: " + rproduct.get().getName() + " removed successfully.");
+
 	}
 
 	@Override

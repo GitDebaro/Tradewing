@@ -29,15 +29,16 @@ export default{
         const jwt = localStorage.getItem('token');
         if (!jwt) throw new Error('JWT no encontrado');
 
-        await axios.delete(`/api/products/delete/${productId}`, {
+        await axios.delete(`/api/products/removeProduct`, {
+          params: {
+            productId
+          },
           headers: {
             Authorization: `Bearer ${jwt}`
           }
         });
 
-        // Elimina visualmente el producto del array
-        this.productos = this.productos.filter(p => p.id !== productId);
-        console.log(`[SALEPRODUCT] Producto ${productId} eliminado`);
+        location.reload();
 
       } catch (err) {
         console.error('[SALEPRODUCT] Error al eliminar producto:', err);
