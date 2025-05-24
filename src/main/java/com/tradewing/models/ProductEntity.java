@@ -3,13 +3,9 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-<<<<<<< HEAD
-import com.fasterxml.jackson.annotation.JsonBackReference;
-=======
 import com.tradewing.models.UserEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
->>>>>>> dev
 
 @Entity
 @Table(name = "products")
