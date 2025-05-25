@@ -7,7 +7,6 @@ import com.tradewing.models.ProductEntity;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
 import com.tradewing.services.ProductService;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +17,8 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.Claims;
 
-import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Value;
 
-import org.apache.commons.codec.digest.DigestUtils;
 
 import javax.crypto.SecretKey;
 
@@ -48,7 +45,7 @@ public class UserServiceImpl implements UserService {
 		String hashedPass = DigestUtils.sha256Hex(user.getPassword());
 		user.setPassword(hashedPass);
 		try{
-			UserEntity newUser = usrRepo.save(user);
+				usrRepo.save(user);
 				System.out.println("[REGISTER][SUCCESS] User created");
 				return new ResponseEntity<>("User created successfully", HttpStatus.CREATED);
 		}
@@ -95,7 +92,7 @@ public class UserServiceImpl implements UserService {
 	public UserInfo getUserData(String token){
 		try{
 			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
 
 			if(currentUser == null)
@@ -119,7 +116,7 @@ public class UserServiceImpl implements UserService {
 		try{
 
 			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
 
 			if(currentUser == null)

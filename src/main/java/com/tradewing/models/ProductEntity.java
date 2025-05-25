@@ -7,9 +7,6 @@ import com.tradewing.models.UserEntity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-import java.util.List;
-
-
 @Entity
 @Table(name = "products")
 @Data
@@ -24,7 +21,7 @@ public class ProductEntity {
     private String name;
 
     @Column(nullable = false)
-    private Long price;
+    private Long price; 
 
     @ManyToOne
     @JoinColumn(name = "vendedor")
