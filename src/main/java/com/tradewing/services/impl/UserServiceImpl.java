@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.UpdateUserPayload;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -127,6 +128,32 @@ public class UserServiceImpl implements UserService {
 		catch(Exception e){
 			System.out.println("[PROFILE][ERROR] Could not get claims from token");
 			return inventory;
+		}
+	}
+
+	public ResponseEntity<UserInfo> updateUserData(UpdateUserPayload payload){
+		UserInfo response = new UserInfo();
+		try{
+			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
+			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(payload.getToken()).getBody();
+			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+
+			if(currentUser == null)
+				return new ResponseEntity(response,HttpStatus.NOT_FOUND);
+
+			currentUser.setImage(payload.getImage());
+
+			UserEntity updatedUser = usrRepo.save(currentUser);
+
+			response.setName(updatedUser.getName());
+			response.setSurname(updatedUser.getSurname());
+			response.setEmail(updatedUser.getEmail());
+			response.setImage(updatedUser.getImage()); 
+
+			return new ResponseEntity(response,HttpStatus.OK);
+		}
+		catch(Exception e){
+			return new ResponseEntity(response,HttpStatus.BAD_REQUEST);
 		}
 	}
 }
