@@ -15,6 +15,7 @@
       <p class="text-gray-700">{{ product.description }}</p>
       <p class="text-2xl font-semibold text-green-600">€{{ product.price }}</p>
       <button
+        @click="checkout"
         class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
       >
         Buy now
@@ -41,12 +42,13 @@ import axios from 'axios';
 
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-// Si tienes el componente del vendedor
 import SellerProfile from './SellerInfo.vue'
+import { loadStripe } from '@stripe/stripe-js'
 
 const route = useRoute()
 const productId = route.params.id
 const product = ref(null)
+const stripePromise = loadStripe('pk_test_51RQt5iFKXFqkVucKerE77uT1DflA35SydnMgDzpLiekbFoatNBEnBnoIDFNCiCxctkOMiIZX8rgWSZMv6C5y8b0O00p9nVwV9x')
 
 onMounted(async () => {
   try {
@@ -59,4 +61,20 @@ onMounted(async () => {
     console.error('Error al cargar el producto:', error)
   }
 })
+
+const checkout = async () => {
+  try {
+    const response = await axios.post('/api/payment/pay', {
+      id: productId,
+      productName: product.value.name,
+      amount: product.value.price*100
+    })
+
+    const stripe = await stripePromise
+    await stripe.redirectToCheckout({ sessionId: response.data.id })
+  } catch (error) {
+    console.error('Error al crear la sesión de pago:', error)
+    alert('Hubo un problema al iniciar el pago.')
+  }
+}
 </script>

@@ -1,7 +1,12 @@
 const isAuthenticated = (to,from,next) => {
 
     const token = localStorage.getItem('token');
-    localStorage.setItem('lastPath',to.path);
+    console.log(to.path)
+    
+    if(to.path.includes('/cancel') || to.path.includes('/success'))
+        localStorage.setItem('lastPath','/dashboard')  
+    else
+        localStorage.setItem('lastPath',to.path);
 
     if(!token){
         return next('/login');
