@@ -90,21 +90,21 @@ public class PaymentController {
         Long productId = Long.parseLong(id);
         
         ProductEntity product = productRepository.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
+                .orElseThrow(() -> new RuntimeException("Product not found"));
 
-        String subject = "Producto vendido: " + product.getName();
+        String subject = "Details of your recently purchase on Tradewing: " + product.getName();
         String content = buildHtmlEmail(product);
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            helper.setTo("turi3d@gmail.com");
+            helper.setTo(email);
             helper.setSubject(subject);
             helper.setText(content, true); // true = HTML
 
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new RuntimeException("Error al enviar el correo", e);
+            throw new RuntimeException("Error sending email", e);
         }
         
         return ResponseEntity.ok().build();
@@ -114,10 +114,10 @@ public class PaymentController {
         return """
             <div style="font-family: Arial, sans-serif;">
               <h2>Details of your recently purchase on Tradewing</h2>
-              <p><strong>Nombre:</strong> %s</p>
-              <p><strong>Precio:</strong> €%d</p>
-              <p><strong>Descripción:</strong> %s</p>
-              <img src="%s" alt="Imagen del producto" style="max-width: 300px; border-radius: 10px; margin-top: 10px;">
+              <p><strong>Name:</strong> %s</p>
+              <p><strong>Price:</strong> €%d</p>
+              <p><strong>Description:</strong> %s</p>
+              <img src="%s" alt="Product image" style="max-width: 300px; border-radius: 10px; margin-top: 10px;">
             </div>
             """.formatted(
                 product.getName(),
