@@ -14,8 +14,20 @@
       <h1 class="text-3xl font-bold">{{ product.name }}</h1>
       <p class="text-gray-700">{{ product.description }}</p>
       <p class="text-2xl font-semibold text-green-600">€{{ product.price }}</p>
+      <!-- Dirección de envío -->
+      <div class="flex flex-col gap-2">
+        <label for="direccion" class="font-semibold text-gray-700">Dirección de envío:</label>
+        <input
+          id="direccion"
+          v-model="shippingAddress"
+          type="text"
+          placeholder="Calle, número, ciudad, código postal..."
+          class="border border-gray-300 rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
       <button
         class="bg-blue-600 text-white px-6 py-3 rounded-xl hover:bg-blue-700 transition"
+        @click = comprarProducto
       >
         Buy now
       </button>
@@ -47,6 +59,7 @@ import SellerProfile from './SellerInfo.vue'
 const route = useRoute()
 const productId = route.params.id
 const product = ref(null)
+const shippingAddress = ref('') // Aquí se almacena la dirección
 
 onMounted(async () => {
   try {
@@ -59,4 +72,25 @@ onMounted(async () => {
     console.error('Error al cargar el producto:', error)
   }
 })
+
+async function comprarProducto() {
+  if (!shippingAddress.value.trim()) {
+    alert('Por favor, introduce una dirección de envío.');
+    return;
+  }
+
+  try {
+    await axios.post('/api/orders', {
+      productId: product.value.id,
+      buyerId: product.value.vendedor,
+      shippingAddress: shippingAddress.value
+    });
+
+    alert('Pedido realizado correctamente.');
+    // Opcional: redirigir a /profile o mostrar confirmación
+  } catch (error) {
+    console.error('Error al crear el pedido:', error);
+    alert('Error al realizar el pedido.');
+  }
+}
 </script>
