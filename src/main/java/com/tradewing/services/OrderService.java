@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface OrderService {
 
-	void createOrder(Long product, Long user, String shippingAddress);
+	void createOrder(Long product, String shippingAddress, String token);
 }

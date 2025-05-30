@@ -17,15 +17,6 @@
                 </div>
             </div>
         </div>
-      <div v-for="order in activeOrders" :key="order.id" class="pedido-card">
-        <h3>Producto: {{ order.productId }}</h3>
-        <ul>
-          <li v-for="(step, index) in order.steps" :key="index">
-            {{ step.name }} - <span :class="{ done: step.done }">{{ step.done ? '✓' : 'Pendiente' }}</span>
-          </li>
-        </ul>
-        <button v-if="order.status === 'delivered'" @click="eliminarPedido(order.id)">Eliminar del perfil</button>
-      </div>
     </div>
 </template>
 

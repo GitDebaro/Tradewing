@@ -76,6 +76,9 @@ onMounted(async () => {
 
 const checkout = async () => {
   try {
+    
+    localStorage.setItem('shippingAddress', shippingAddress.value)
+
     const response = await axios.post('/api/payment/pay', {
       id: productId,
       productName: product.value.name,

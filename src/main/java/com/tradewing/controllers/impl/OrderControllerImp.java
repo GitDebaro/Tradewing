@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -26,8 +27,9 @@ public class OrderControllerImp implements OrderController {
 
 	@Override
 	@PostMapping("/create")
-	public void createOrder(@RequestBody OrderRequest order){
-        ordersrvc.createOrder(order.productId, order.buyerId, order.shippingAddress);
+	public void createOrder(@RequestBody OrderRequest order,@RequestHeader("Authorization") String authHeader){
+        String token = authHeader.replace("Bearer","");
+        ordersrvc.createOrder(order.productId, order.shippingAddress,token);
         System.out.println("[ORDERSERVICE]: Order created");
     }
 

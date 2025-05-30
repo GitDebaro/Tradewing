@@ -34,13 +34,34 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService {
+
+    @Value("${my.secret.jwt}")
+    private String jwtSecret;
     
     private final ProductRepo productRepo;
 	private final UserRepo usrp;
     private final OrderRepo orderRepo;
 
     @Override
-    public void createOrder(Long product, Long user, String shippingAddress) {
+    public void createOrder(Long product, String shippingAddress, String token) {
+        UserEntity user;
+		Claims claims = Jwts.parserBuilder()
+						.setSigningKey(getSigningKey())
+						.build()
+						.parseClaimsJws(token)
+						.getBody();
+		String email = claims.getIssuer();
+		Date expiration = claims.getExpiration();
+		Date now = new Date();
+		if(expiration.before(now)){
+			throw new RuntimeException("[CREATEORDER SERVICE]: Token is expired");
+		}
+		try{
+			user = usrp.findUserByEmail(email);
+		}catch(Exception e){
+			throw new RuntimeException("[CREATEORDER SERVICE]: User not found");
+		}
+
         OrderEntity order = new OrderEntity();
         LocalDateTime start = LocalDateTime.now();
         List<OrderStep> steps = generateSteps(start);
@@ -50,10 +71,7 @@ public class OrderServiceImp implements OrderService {
 
         order.setProduct(orderProd.get());
 
-        Optional <UserEntity> orderUser;
-        orderUser = usrp.findById(user);
-
-        order.setUser(orderUser.get());
+        order.setUser(user);
 
         order.setShippingAddress(shippingAddress);
 
@@ -87,5 +105,9 @@ public class OrderServiceImp implements OrderService {
 
         return steps;
     }
+
+    private SecretKey getSigningKey() {
+    	return Keys.hmacShaKeyFor(jwtSecret.getBytes());
+	}
 	
 }

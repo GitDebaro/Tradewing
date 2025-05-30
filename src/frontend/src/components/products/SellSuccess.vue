@@ -35,9 +35,24 @@ const sendConfirmationEmail = async () => {
             email: user.email    
             }
         })
+        // Crear orden de pedido
+        const jwt = localStorage.getItem('token');
+        await axios.post('/api/order/create', {
+          productId: productId,
+          shippingAddress: localStorage.getItem('shippingAddress')  // Puedes cambiarlo según el flujo real
+        },{
+          headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${jwt}`
+          }
+        })
+
+        console.log('Order created successfully.')
+
     } catch (error) {
         console.error('Error sending confirmation email:', error);
     }
 }
 sendConfirmationEmail()
+
 </script>
