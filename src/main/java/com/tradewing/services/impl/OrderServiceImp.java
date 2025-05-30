@@ -43,24 +43,15 @@ public class OrderServiceImp implements OrderService {
     private final OrderRepo orderRepo;
 
     @Override
+    public List<OrderEntity> getAllOrders(String token){
+        UserEntity user = getUserFromToken(token);
+        return orderRepo.findAllByUserEmail(user.getEmail());
+    }
+
+
+    @Override
     public void createOrder(Long product, String shippingAddress, String token) {
-        UserEntity user;
-		Claims claims = Jwts.parserBuilder()
-						.setSigningKey(getSigningKey())
-						.build()
-						.parseClaimsJws(token)
-						.getBody();
-		String email = claims.getIssuer();
-		Date expiration = claims.getExpiration();
-		Date now = new Date();
-		if(expiration.before(now)){
-			throw new RuntimeException("[CREATEORDER SERVICE]: Token is expired");
-		}
-		try{
-			user = usrp.findUserByEmail(email);
-		}catch(Exception e){
-			throw new RuntimeException("[CREATEORDER SERVICE]: User not found");
-		}
+        UserEntity user = getUserFromToken(token);
 
         OrderEntity order = new OrderEntity();
         LocalDateTime start = LocalDateTime.now();
@@ -88,19 +79,19 @@ public class OrderServiceImp implements OrderService {
         List<OrderStep> steps = new ArrayList<>();
 
         // Paso 1: Pedido recibido (entre 2 y 3 horas desde ahora)
-        LocalDateTime pedidoRecibido = startTime.plusMinutes(120 + new Random().nextInt(60));
+        LocalDateTime pedidoRecibido = startTime.plusMinutes(1/*+ new Random().nextInt(0)*/);
         steps.add(new OrderStep("Pedido recibido", pedidoRecibido));
 
         // Paso 2: Saliendo del warehouse (30 min a 1h después del anterior)
-        LocalDateTime saliendo = pedidoRecibido.plusMinutes(30 + new Random().nextInt(30));
+        LocalDateTime saliendo = pedidoRecibido.plusMinutes(1);
         steps.add(new OrderStep("Saliendo del warehouse", saliendo));
 
         // Paso 3: En reparto (30 min a 1h después del anterior)
-        LocalDateTime enReparto = saliendo.plusMinutes(30 + new Random().nextInt(30));
+        LocalDateTime enReparto = saliendo.plusMinutes(1);
         steps.add(new OrderStep("En reparto", enReparto));
 
         // Paso 4: Recibido (15-30 min después del anterior)
-        LocalDateTime recibido = enReparto.plusMinutes(15 + new Random().nextInt(15));
+        LocalDateTime recibido = enReparto.plusMinutes(1);
         steps.add(new OrderStep("Recibido", recibido));
 
         return steps;
@@ -110,4 +101,25 @@ public class OrderServiceImp implements OrderService {
     	return Keys.hmacShaKeyFor(jwtSecret.getBytes());
 	}
 	
+    private UserEntity getUserFromToken (String token){
+        UserEntity user;
+		Claims claims = Jwts.parserBuilder()
+						.setSigningKey(getSigningKey())
+						.build()
+						.parseClaimsJws(token)
+						.getBody();
+		String email = claims.getIssuer();
+		Date expiration = claims.getExpiration();
+		Date now = new Date();
+		if(expiration.before(now)){
+			throw new RuntimeException("[CREATEORDER SERVICE]: Token is expired");
+		}
+		try{
+			user = usrp.findUserByEmail(email);
+		}catch(Exception e){
+			throw new RuntimeException("[CREATEORDER SERVICE]: User not found");
+		}
+
+        return user;
+    }
 }

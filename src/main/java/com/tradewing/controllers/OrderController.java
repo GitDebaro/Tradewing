@@ -2,6 +2,7 @@ package com.tradewing.controllers;
 
 import com.tradewing.dto.AddProductRequest;
 import com.tradewing.dto.OrderRequest;
+import com.tradewing.models.OrderEntity;
 import com.tradewing.models.ProductEntity;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,5 +22,10 @@ public interface OrderController {
     @PostMapping("/create")
     void createOrder(@RequestBody OrderRequest order,@RequestHeader("Authorization") String authHeader);
     
+    @GetMapping("/my-orders")
+    List<OrderEntity> getOrders(@RequestHeader("Authorization") String authHeader);
+
+    @DeleteMapping("/removeOrder")
+    void removeOrder(@RequestParam("orderId") Long productId,@RequestHeader("Authorization") String authHeader);
 
 }
