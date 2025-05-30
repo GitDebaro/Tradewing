@@ -32,6 +32,10 @@ public class ProductEntity {
 
     private String image;
 
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("product") // evita bucles infinitos en la serialización
+    private OrderEntity order;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
 }
