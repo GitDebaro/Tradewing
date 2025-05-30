@@ -1,7 +1,6 @@
 const isAuthenticated = (to,from,next) => {
 
     const token = localStorage.getItem('token');
-    console.log(to.path)
     
     if(to.path.includes('/cancel') || to.path.includes('/success'))
         localStorage.setItem('lastPath','/dashboard')  
