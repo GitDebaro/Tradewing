@@ -23,10 +23,10 @@ public interface ProductController {
     @GetMapping("/searchId")
     ResponseEntity<ProductEntity> getProductsById(@RequestParam Long id);	
 
-    @PostMapping("/addProduct")
+    @PostMapping("/addProduct") //ResponseEntity OK
     void addProduct(@RequestBody AddProductRequest product, @RequestHeader("Authorization") String authHeader);
 
-    @DeleteMapping("/removeProduct")
+    @DeleteMapping("/removeProduct") //ResponseEntity OK
     void removeProduct(@RequestParam("productId") Long productId, @RequestHeader("Authorization") String authHeader);
 
     @GetMapping("")
