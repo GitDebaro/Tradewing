@@ -28,6 +28,7 @@ class UserServiceImplTest {
     private UserServiceImpl userSC;
 
     private UserEntity testUser;
+    private UserEntity newUser;
 
 
     @BeforeEach
@@ -39,6 +40,12 @@ class UserServiceImplTest {
         testUser.setName("Test User");
         testUser.setEmail("test@user.com");
         testUser.setPassword("sha256");
+
+        newUser = new UserEntity();        
+        newUser.setId(2L);
+        newUser.setName("Test User");
+        newUser.setEmail("test@user.com");
+        newUser.setPassword("sha256");
     }
 
     @Test
@@ -99,12 +106,6 @@ class UserServiceImplTest {
 
     @Test 
     void addUserDDBBNotAccesible(){        
-        UserEntity newUser = new UserEntity();        
-        newUser.setId(2L);
-        newUser.setName("Test User 2");
-        newUser.setEmail("test2@user.com");
-        newUser.setPassword("sha256");
-
         when(usrRepo.save(any(UserEntity.class))).thenThrow(new RuntimeException("FATAL: Max client connections reached"));
 
         ResponseEntity<?> response = userSC.addUser(newUser);

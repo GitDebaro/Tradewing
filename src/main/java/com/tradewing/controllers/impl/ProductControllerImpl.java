@@ -44,7 +44,7 @@ public class ProductControllerImpl implements ProductController {
 	@Override
 	@PostMapping("/addProduct")
 	public void addProduct(@RequestBody AddProductRequest product, @RequestHeader("Authorization") String authHeader){
-		String token = authHeader.replace("Bearer","");
+		String token = authHeader.replace("Bearer ","");
 		productSC.addProduct(product,token);
 		System.out.println("[PRODUCT CONTROLLER]: Product added\n");
 	}
@@ -52,7 +52,7 @@ public class ProductControllerImpl implements ProductController {
 	@Override
 	@DeleteMapping("/removeProduct")
 	public void removeProduct(@RequestParam("productId") Long productId, @RequestHeader("Authorization") String authHeader){
-		String token = authHeader.replace("Bearer","");
+		String token = authHeader.replace("Bearer ","");
 		productSC.removeProduct(productId,token);
 		System.out.println("[PRODUCT CONTROLLER]: Product removed");
 	}
