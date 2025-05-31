@@ -1,0 +1,117 @@
+package com.tradewing.services.impl;
+
+import com.tradewing.models.UserEntity;
+import com.tradewing.models.OrderEntity;
+import com.tradewing.models.OrderStep;
+import com.tradewing.models.ProductEntity;
+import com.tradewing.repos.OrderRepo;
+import com.tradewing.repos.ProductRepo;
+import com.tradewing.repos.UserRepo;
+import com.tradewing.services.OrderService;
+import com.tradewing.services.JWTUtils;
+import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.annotation.Value;
+
+
+
+import java.time.LocalDateTime;
+import java.util.*;
+
+@Service
+@RequiredArgsConstructor
+public class OrderServiceImp implements OrderService {
+    
+    private final ProductRepo productRepo;
+	private final UserRepo usrp;
+    private final OrderRepo orderRepo;
+    private final JWTUtils jwt;
+
+    @Override
+    public List<OrderEntity> getAllOrders(String token){
+        UserEntity user = jwt.decode(token);
+        return orderRepo.findAllByUserEmail(user.getEmail());
+    }
+
+
+    @Override
+    public void removeOrder(Long orderId, String token) {
+        UserEntity user = jwt.decode(token);
+        Optional<OrderEntity> orderOpt = orderRepo.findById(orderId);
+
+        if (orderOpt.isEmpty()) {
+            throw new RuntimeException("Order not found");
+        }
+
+        OrderEntity order = orderOpt.get();
+
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("Operation denied, Unauthorized");
+        }
+
+        ProductEntity product = order.getProduct();
+        if (product != null) {
+            product.setOrder(null);
+            productRepo.save(product); // guarda el cambio
+        }
+        if (user != null) {
+            user.getOrders().remove(order);
+            usrp.save(user); // guarda el cambio
+        }
+
+        orderRepo.delete(order);
+        System.out.println("[ORDERSERVICE]: Order deleted: " + order.getProduct().getName());
+    }
+
+
+
+    @Override
+    public void createOrder(Long product, String shippingAddress, String token) {
+        UserEntity user = jwt.decode(token);
+
+        OrderEntity order = new OrderEntity();
+        LocalDateTime start = LocalDateTime.now();
+        List<OrderStep> steps = generateSteps(start);
+
+        Optional <ProductEntity> orderProd;
+        orderProd = productRepo.findById(product);
+
+        order.setProduct(orderProd.get());
+
+        order.setUser(user);
+
+        order.setShippingAddress(shippingAddress);
+
+        order.setSteps(steps);
+
+        System.out.println("[CREATEORDER SERVICE]: Check steps: "+ order.getSteps());
+		System.out.println("[CREATEORDER SERVICE]: Check producto: "+ order.getProduct().getName());
+		System.out.println("[CREATEORDER SERVICE]: Check user: "+ order.getUser().getEmail());
+		System.out.println("[CREATEORDER SERVICE]: Order successfully created");
+		orderRepo.save(order);
+    }
+
+    public List<OrderStep> generateSteps(LocalDateTime startTime) {
+        List<OrderStep> steps = new ArrayList<>();
+
+        // Paso 1: Pedido recibido (entre 2 y 3 horas desde ahora)
+        LocalDateTime pedidoRecibido = startTime.plusMinutes(1/*+ new Random().nextInt(0)*/);
+        steps.add(new OrderStep("Pedido recibido", pedidoRecibido));
+
+        // Paso 2: Saliendo del warehouse (30 min a 1h después del anterior)
+        LocalDateTime saliendo = pedidoRecibido.plusMinutes(1);
+        steps.add(new OrderStep("Saliendo del warehouse", saliendo));
+
+        // Paso 3: En reparto (30 min a 1h después del anterior)
+        LocalDateTime enReparto = saliendo.plusMinutes(1);
+        steps.add(new OrderStep("En reparto", enReparto));
+
+        // Paso 4: Recibido (15-30 min después del anterior)
+        LocalDateTime entregado = enReparto.plusMinutes(1);
+        steps.add(new OrderStep("Entregado", entregado));
+
+        return steps;
+    }
+
+}

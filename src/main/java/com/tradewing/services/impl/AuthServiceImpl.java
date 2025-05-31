@@ -1,7 +1,7 @@
 package com.tradewing.services.impl;
 
 import com.tradewing.services.AuthService;
-import com.tradewing.services.UserService;
+import com.tradewing.services.JWTUtils;
 import com.tradewing.models.UserEntity;
 import com.tradewing.dto.TokenCredential;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,7 @@ public class AuthServiceImpl implements AuthService{
 
     private final UserRepo usrRepo;
     
-    private final UserService userSC;
+    private final JWTUtils jwt;
 
     @Value("${google.client.id}")
     private String CLIENT_ID;
@@ -61,7 +61,7 @@ public class AuthServiceImpl implements AuthService{
                     usrRepo.save(googleUser);
                 }
 
-                String trdToken = userSC.generateToken(googleUser.getEmail());
+                String trdToken = jwt.createToken(googleUser.getEmail());
 
                 return ResponseEntity.ok(trdToken);
             } else {

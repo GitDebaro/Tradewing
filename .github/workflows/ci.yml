@@ -15,6 +15,9 @@ jobs:
       DB_URL: ${{secrets.DB_URL}}
       JWT_SECRET: ${{secrets.JWT_SECRET}}
       GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+      SK_TEST: ${{secrets.SK_TEST}}
+      FRONT_URL: ${{secrets.FRONT_URL}}
+      PW_EMAIL: ${{secrets.PW_EMAIL}}
 
     steps:
     - uses: actions/checkout@v2

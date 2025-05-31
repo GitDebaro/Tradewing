@@ -3,9 +3,11 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
 import java.util.List;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -33,9 +35,14 @@ public class UserEntity {
 
     private String image = "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png";
 
-    @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductEntity> products;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "user")
+    @JsonBackReference
+    private List<OrderEntity> orders = new ArrayList<>();
+
 }
