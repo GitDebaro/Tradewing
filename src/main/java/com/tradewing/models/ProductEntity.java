@@ -3,8 +3,8 @@ package com.tradewing.models;
 import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import com.tradewing.models.UserEntity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -32,6 +32,10 @@ public class ProductEntity {
     private String description;
 
     private String image;
+
+    @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
+    @JsonBackReference // evita bucles infinitos en la serialización
+    private OrderEntity order;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
