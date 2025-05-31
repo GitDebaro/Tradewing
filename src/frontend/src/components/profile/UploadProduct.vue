@@ -3,7 +3,7 @@
     <h2 class="text-2xl font-bold mb-4 text-gray-800">Upload Product</h2>
     <form id="addProduct" @submit.prevent="handleUpload" class="space-y-4">
       <input v-model="pName" type="text" placeholder="Name" class="w-[90%] block mx-auto px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
-      <input v-model="ppPrice" type="text" placeholder="Price" class="w-[90%] block mx-auto px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+      <input v-model="ppPrice" type="number" placeholder="Price" min="0" max="999999" class="w-[90%] block mx-auto px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" required>
       <input v-model="pImage" type="text" placeholder="Image" class="w-[90%] block mx-auto px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
       <textarea v-model="pDesc" placeholder="Description" rows="4" class="w-[90%] block mx-auto px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none" required></textarea>
       <button type="submit" class="w-[50%] block mx-auto bg-blue-600 text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition duration-200">
