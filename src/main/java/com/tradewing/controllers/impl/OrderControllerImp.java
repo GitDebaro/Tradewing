@@ -34,7 +34,7 @@ public class OrderControllerImp implements OrderController {
 	public void createOrder(@RequestBody OrderRequest order,@RequestHeader("Authorization") String authHeader){
         String token = authHeader.replace("Bearer","");
         ordersrvc.createOrder(order.productId, order.shippingAddress,token);
-        System.out.println("[ORDERSERVICE]: Order created");
+        System.out.println("[ORDERCONTROLLER]: Order created");
     }
 
     @Override
@@ -42,7 +42,7 @@ public class OrderControllerImp implements OrderController {
     public List<OrderEntity> getOrders(@RequestHeader("Authorization") String authHeader) {
         String token = authHeader.replace("Bearer","");
         List <OrderEntity> orders = ordersrvc.getAllOrders(token);
-        System.out.println("[ORDERSERVICE]: My orders: \n");
+        System.out.println("[ORDERCONTROLLER]: My orders: \n");
         System.out.println(orders);
         return orders;
     }
@@ -50,7 +50,9 @@ public class OrderControllerImp implements OrderController {
     @Override
     @DeleteMapping("/removeOrder")
     public void removeOrder(@RequestParam("orderId") Long productId,@RequestHeader("Authorization") String authHeader){
-
+        String token = authHeader.replace("Bearer","");
+        ordersrvc.removeOrder(productId, token);
+        System.out.println("[ORDERCONTROLLER]: Order removed successfully");
     }
 
 }

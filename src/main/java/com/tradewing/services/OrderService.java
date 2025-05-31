@@ -12,4 +12,6 @@ public interface OrderService {
 	List<OrderEntity> getAllOrders(String token);
 
 	void createOrder(Long product, String shippingAddress, String token);
+
+	void removeOrder(Long orderId, String token);
 }

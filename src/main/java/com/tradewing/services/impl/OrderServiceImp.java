@@ -50,6 +50,37 @@ public class OrderServiceImp implements OrderService {
 
 
     @Override
+    public void removeOrder(Long orderId, String token) {
+        UserEntity user = getUserFromToken(token);
+        Optional<OrderEntity> orderOpt = orderRepo.findById(orderId);
+
+        if (orderOpt.isEmpty()) {
+            throw new RuntimeException("Pedido no encontrado");
+        }
+
+        OrderEntity order = orderOpt.get();
+
+        if (!order.getUser().getId().equals(user.getId())) {
+            throw new RuntimeException("No tienes permiso para eliminar este pedido");
+        }
+
+        ProductEntity product = order.getProduct();
+        if (product != null) {
+            product.setOrder(null);
+            productRepo.save(product); // guarda el cambio
+        }
+        if (user != null) {
+            user.getOrders().remove(order);
+            usrp.save(user); // guarda el cambio
+        }
+
+        orderRepo.delete(order);
+        System.out.println("[ORDERSERVICE]: Order deleted: " + order.getProduct().getName());
+    }
+
+
+
+    @Override
     public void createOrder(Long product, String shippingAddress, String token) {
         UserEntity user = getUserFromToken(token);
 
@@ -91,8 +122,8 @@ public class OrderServiceImp implements OrderService {
         steps.add(new OrderStep("En reparto", enReparto));
 
         // Paso 4: Recibido (15-30 min después del anterior)
-        LocalDateTime recibido = enReparto.plusMinutes(1);
-        steps.add(new OrderStep("Recibido", recibido));
+        LocalDateTime entregado = enReparto.plusMinutes(1);
+        steps.add(new OrderStep("Entregado", entregado));
 
         return steps;
     }

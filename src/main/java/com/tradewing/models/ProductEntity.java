@@ -4,6 +4,7 @@ import lombok.*;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -33,7 +34,7 @@ public class ProductEntity {
     private String image;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("product") // evita bucles infinitos en la serialización
+    @JsonBackReference // evita bucles infinitos en la serialización
     private OrderEntity order;
 
     @Column(name = "created_at")

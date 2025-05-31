@@ -3,6 +3,11 @@ package com.tradewing.models;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.hibernate.annotations.Cascade;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,10 +25,12 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonManagedReference
     private UserEntity user;
 
     @OneToOne
     @JoinColumn(name = "product_id", unique = true, nullable = false)
+    @JsonManagedReference
     private ProductEntity product;
 
     @Column(nullable = false)
@@ -31,5 +38,6 @@ public class OrderEntity {
 
     @ElementCollection
     @CollectionTable(name = "order_steps", joinColumns = @JoinColumn(name = "order_id"))
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     private List<OrderStep> steps = new ArrayList<>();
 }

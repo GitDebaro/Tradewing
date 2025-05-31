@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 @Embeddable
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class OrderStep {
     private String name;
     private LocalDateTime deadline;
