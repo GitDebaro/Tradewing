@@ -28,8 +28,6 @@ const sendConfirmationEmail = async () => {
         
         const user = response.data;
 
-        console.log(user.email)
-
         await axios.get('/api/payment/sendConfirmation', {
             params: { id: productId.toString(),
             email: user.email    
