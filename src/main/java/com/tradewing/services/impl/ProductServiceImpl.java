@@ -64,4 +64,9 @@ public class ProductServiceImpl implements ProductService {
 	public List<ProductEntity> getAllProducts(){
 		return productRepo.findAll();
 	}
+
+	@Override
+	public List<ProductEntity> findBySeller(UserEntity seller){
+		return productRepo.findBySeller(seller);
+	}
 }
