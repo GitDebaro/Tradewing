@@ -105,7 +105,7 @@ class UserServiceImplTest {
         newUser.setEmail("test2@user.com");
         newUser.setPassword("sha256");
 
-        when(usrRepo.save(any(UserEntity.class))).thenThrow(new RuntimeException("Database maximum client number reached"));
+        when(usrRepo.save(any(UserEntity.class))).thenThrow(new RuntimeException("FATAL: Max client connections reached"));
 
         ResponseEntity<?> response = userSC.addUser(newUser);
         assertEquals(500, response.getStatusCodeValue());
