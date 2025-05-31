@@ -35,7 +35,7 @@ public class UserEntity {
 
     private String image = "https://definicion.de/wp-content/uploads/2019/07/perfil-de-usuario.png";
 
-    @OneToMany(mappedBy = "vendedor", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductEntity> products;
 
     @Column(name = "created_at")
