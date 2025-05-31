@@ -143,7 +143,7 @@ class ProductControllerImplTest{
     void testFindBySellerReturnsList() {
         List<ProductEntity> products = List.of(product2);
 
-        when(productRepo.findByVendedor(seller)).thenReturn(products);
+        when(productRepo.findBySeller(seller)).thenReturn(products);
 
         List<ProductEntity> result = productService.findBySeller(seller);
 
@@ -151,21 +151,19 @@ class ProductControllerImplTest{
         assertEquals(1, result.size());
         assertEquals("Product Test 2", result.get(0).getName());
         assertEquals("https://placehold.co/400x400?text=Producto2",result.get(0).getImage());
-        verify(productRepo).findByVendedor(seller);
+        verify(productRepo).findBySeller(seller);
     }
 
     @Test
     void testFindBySellerReturnsListEmpty() {
         List<ProductEntity> products = List.of();
 
-        when(productRepo.findByVendedor(seller)).thenReturn(products);
+        when(productRepo.findBySeller(seller)).thenReturn(products);
 
         List<ProductEntity> result = productService.findBySeller(seller);
 
         assertNotNull(result);
         assertTrue(result.isEmpty());
-        assertEquals("Product Test 2", result.get(0).getName());
-        assertEquals("https://placehold.co/400x400?text=Producto2",result.get(0).getImage());
-        verify(productRepo).findByVendedor(seller);
+        verify(productRepo).findBySeller(seller);
     }
 }
