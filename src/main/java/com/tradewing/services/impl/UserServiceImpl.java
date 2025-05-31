@@ -4,24 +4,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
 import com.tradewing.models.UserEntity;
 import com.tradewing.models.ProductEntity;
+import com.tradewing.repos.ProductRepo;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.services.UserService;
-import com.tradewing.services.ProductService;
+import com.tradewing.services.JWTUtils;
 import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
 import com.tradewing.dto.UserInfo;
 import com.tradewing.dto.UpdateUserPayload;
 
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.Claims;
-
 import org.springframework.beans.factory.annotation.Value;
-
-
-import javax.crypto.SecretKey;
 
 import java.util.*;
 
@@ -30,10 +23,8 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
 	
 	private final UserRepo usrRepo;
-	private final ProductService productSC;
-
-	@Value("${my.secret.jwt}")
-    private String jwtSecret;
+	private final ProductRepo productSC;
+	private final JWTUtils jwt;
 
 	@Override
 	public List<UserEntity> getAllUsers(){
@@ -72,29 +63,13 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("[LOGIN]: Wrong password, User: " + user.getEmail());
         }
 
-        System.out.println("[LOGIN]: Login exitoso, generando token.");
-        return generateToken(user.getEmail());
-    }
-
-    public String generateToken(String email) {
-        Date now = new Date();
-        Date expiring = new Date(now.getTime() + 86400000);
-        SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-
-        String token = Jwts.builder().setIssuer(email)
-                                .setIssuedAt(now)
-                                .setExpiration(expiring)
-                                .signWith(key,SignatureAlgorithm.HS256)
-                                .compact();
-        System.out.println("[LOGIN]: Token generado: " + token);
-        return token;
+        System.out.println("[LOGIN]: Login success");
+        return jwt.createToken(user.getEmail());
     }
 
 	public UserInfo getUserData(String token){
 		try{
-			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+			UserEntity currentUser = jwt.decode(token);
 
 			if(currentUser == null)
 				return null;
@@ -115,10 +90,7 @@ public class UserServiceImpl implements UserService {
 	public List<ProductEntity> getMyInventory(String token){
 		List<ProductEntity> inventory = new ArrayList<>();
 		try{
-
-			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
-			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+			UserEntity currentUser = jwt.decode(token);
 
 			if(currentUser == null)
 				return inventory;
@@ -134,9 +106,7 @@ public class UserServiceImpl implements UserService {
 	public ResponseEntity<UserInfo> updateUserData(UpdateUserPayload payload){
 		UserInfo response = new UserInfo();
 		try{
-			SecretKey key = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-			Claims claims = Jwts.parser().setSigningKey(key).parseClaimsJws(payload.getToken()).getBody();
-			UserEntity currentUser = usrRepo.findByEmail(claims.getIssuer()).orElse(null);
+			UserEntity currentUser = jwt.decode(payload.getToken());
 
 			if(currentUser == null)
 				return new ResponseEntity(response,HttpStatus.NOT_FOUND);

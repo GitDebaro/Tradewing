@@ -37,7 +37,7 @@
     <div class="md:w-1/3 w-full">
       <div class="border p-4 rounded-xl bg-white shadow-md">
         <p class="font-semibold text-gray-600 mb-2">Seller information</p>
-        <SellerProfile :seller="product.vendedor" />
+        <SellerProfile :seller="product.seller" />
       </div>
     </div>
   </div>
@@ -68,7 +68,7 @@ onMounted(async () => {
       params: { id: productId }
     })
     product.value = response.data
-    console.log(product.value.vendedor)
+    console.log(product.value.seller)
   } catch (error) {
     console.error('Error al cargar el producto:', error)
   }

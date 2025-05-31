@@ -14,5 +14,5 @@ public interface ProductRepo extends JpaRepository<ProductEntity, Long> {
 
     Optional<ProductEntity> findById(Long id);
 
-    List<ProductEntity> findByVendedor(UserEntity vendedor);
+    List<ProductEntity> findBySeller(UserEntity seller);
 }

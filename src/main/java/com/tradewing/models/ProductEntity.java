@@ -24,9 +24,9 @@ public class ProductEntity {
     private Long price; 
 
     @ManyToOne
-    @JoinColumn(name = "vendedor")
+    @JoinColumn(name = "seller")
     @JsonIgnoreProperties({"products", "password"})
-    private UserEntity vendedor;
+    private UserEntity seller;
 
     @Column(nullable = false, length = 500)
     private String description;

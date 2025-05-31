@@ -16,8 +16,6 @@ public interface UserService {
 
 	String authenticate(String email, String password);
 
-    String generateToken(String email);
-
 	UserInfo getUserData(String token);
 
 	List<ProductEntity> getMyInventory(String token);

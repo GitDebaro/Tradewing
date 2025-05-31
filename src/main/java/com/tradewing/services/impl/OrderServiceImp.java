@@ -1,7 +1,5 @@
 package com.tradewing.services.impl;
 
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.HttpStatus;
 import com.tradewing.models.UserEntity;
 import com.tradewing.models.OrderEntity;
 import com.tradewing.models.OrderStep;
@@ -9,24 +7,14 @@ import com.tradewing.models.ProductEntity;
 import com.tradewing.repos.OrderRepo;
 import com.tradewing.repos.ProductRepo;
 import com.tradewing.repos.UserRepo;
-import com.tradewing.services.UserService;
 import com.tradewing.services.OrderService;
-import com.tradewing.services.ProductService;
+import com.tradewing.services.JWTUtils;
 import org.springframework.stereotype.Service;
-import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
-import com.tradewing.dto.UserInfo;
-import com.tradewing.dto.UpdateUserPayload;
-
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.Claims;
 
 import org.springframework.beans.factory.annotation.Value;
 
 
-import javax.crypto.SecretKey;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,34 +22,32 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImp implements OrderService {
-
-    @Value("${my.secret.jwt}")
-    private String jwtSecret;
     
     private final ProductRepo productRepo;
 	private final UserRepo usrp;
     private final OrderRepo orderRepo;
+    private final JWTUtils jwt;
 
     @Override
     public List<OrderEntity> getAllOrders(String token){
-        UserEntity user = getUserFromToken(token);
+        UserEntity user = jwt.decode(token);
         return orderRepo.findAllByUserEmail(user.getEmail());
     }
 
 
     @Override
     public void removeOrder(Long orderId, String token) {
-        UserEntity user = getUserFromToken(token);
+        UserEntity user = jwt.decode(token);
         Optional<OrderEntity> orderOpt = orderRepo.findById(orderId);
 
         if (orderOpt.isEmpty()) {
-            throw new RuntimeException("Pedido no encontrado");
+            throw new RuntimeException("Order not found");
         }
 
         OrderEntity order = orderOpt.get();
 
         if (!order.getUser().getId().equals(user.getId())) {
-            throw new RuntimeException("No tienes permiso para eliminar este pedido");
+            throw new RuntimeException("Operation denied, Unauthorized");
         }
 
         ProductEntity product = order.getProduct();
@@ -82,7 +68,7 @@ public class OrderServiceImp implements OrderService {
 
     @Override
     public void createOrder(Long product, String shippingAddress, String token) {
-        UserEntity user = getUserFromToken(token);
+        UserEntity user = jwt.decode(token);
 
         OrderEntity order = new OrderEntity();
         LocalDateTime start = LocalDateTime.now();
@@ -128,29 +114,4 @@ public class OrderServiceImp implements OrderService {
         return steps;
     }
 
-    private SecretKey getSigningKey() {
-    	return Keys.hmacShaKeyFor(jwtSecret.getBytes());
-	}
-	
-    private UserEntity getUserFromToken (String token){
-        UserEntity user;
-		Claims claims = Jwts.parserBuilder()
-						.setSigningKey(getSigningKey())
-						.build()
-						.parseClaimsJws(token)
-						.getBody();
-		String email = claims.getIssuer();
-		Date expiration = claims.getExpiration();
-		Date now = new Date();
-		if(expiration.before(now)){
-			throw new RuntimeException("[CREATEORDER SERVICE]: Token is expired");
-		}
-		try{
-			user = usrp.findUserByEmail(email);
-		}catch(Exception e){
-			throw new RuntimeException("[CREATEORDER SERVICE]: User not found");
-		}
-
-        return user;
-    }
 }
