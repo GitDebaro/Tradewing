@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public String authenticate(String email, String rawPassword){
         Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
 
@@ -67,6 +68,7 @@ public class UserServiceImpl implements UserService {
         return jwt.createToken(user.getEmail());
     }
 
+	@Override
 	public UserInfo getUserData(String token){
 		try{
 			UserEntity currentUser = jwt.decode(token);
@@ -87,6 +89,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public List<ProductEntity> getMyInventory(String token){
 		List<ProductEntity> inventory = new ArrayList<>();
 		try{
@@ -103,6 +106,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public ResponseEntity<UserInfo> updateUserData(UpdateUserPayload payload){
 		UserInfo response = new UserInfo();
 		try{

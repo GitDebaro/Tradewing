@@ -4,9 +4,12 @@ import org.springframework.http.ResponseEntity;
 
 import com.tradewing.models.ProductEntity;
 import com.tradewing.models.UserEntity;
+import com.tradewing.services.JWTUtils;
 import com.tradewing.services.impl.ProductServiceImpl;
 import com.tradewing.repos.ProductRepo;
+import com.tradewing.dto.AddProductRequest;
 
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.InjectMocks;
@@ -25,12 +28,16 @@ class ProductControllerImplTest{
     @Mock
     private ProductRepo productRepo;
 
+    @Mock
+    private JWTUtils jwt;
+
     @InjectMocks
     private ProductServiceImpl productService;
 
-    ProductEntity product1;
-    ProductEntity product2;
-    UserEntity seller;
+    private ProductEntity product1;
+    private ProductEntity product2;
+    private UserEntity seller;
+    private UserEntity mockUser;
 
     @BeforeEach
     void setUp() throws Exception {
@@ -52,6 +59,12 @@ class ProductControllerImplTest{
         seller.setId(1L);
         seller.setName("Test User");
         seller.setEmail("test@user.com");
+        seller.setPassword("sha256");
+
+        mockUser = new UserEntity();
+        mockUser.setId(2L);
+        mockUser.setName("seller2");
+        seller.setEmail("seller@user.com");
         seller.setPassword("sha256");
     }
 
@@ -84,12 +97,42 @@ class ProductControllerImplTest{
         verify(productRepo).findByNameContainingIgnoreCase(name);
     }
 
-    /*
-    EXPECTED REFACTOR of JWT Utils class
-    TO DO: addProduct Tests
+   @Test
+    void AddProductSuccess() {
+        AddProductRequest request = new AddProductRequest();
+        request.setName("Laptop");
+        request.setPrice("1500");
+        request.setImage("image.jpg");
+        request.setDescription("A gaming laptop");
 
-    TO DO: removeProduct tests
-    */
+        when(jwt.decode("valid-token")).thenReturn(mockUser);
+
+        productService.addProduct(request, "valid-token");
+
+        ArgumentCaptor<ProductEntity> productCaptor = ArgumentCaptor.forClass(ProductEntity.class);
+        verify(productRepo).save(productCaptor.capture());
+
+        ProductEntity saved = productCaptor.getValue();
+        assertEquals("Laptop", saved.getName());
+        assertEquals(1500L, saved.getPrice());
+        assertEquals("image.jpg", saved.getImage());
+        assertEquals("A gaming laptop", saved.getDescription());
+        assertEquals(mockUser, saved.getSeller());
+    }
+
+    @Test
+    void removeProductSuccess() {
+        ProductEntity product = new ProductEntity();
+        product.setId(100L);
+        product.setName("Mouse");
+
+        when(jwt.decode("valid-token")).thenReturn(mockUser);
+        when(productRepo.findById(100L)).thenReturn(Optional.of(product));
+
+        productService.removeProduct(100L, "valid-token");
+
+        verify(productRepo).delete(product);
+    }
     
     @Test
     void getProductsByIdReturnsOptional() {
