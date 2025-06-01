@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import com.tradewing.models.UserEntity;
 import com.tradewing.models.ProductEntity;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UpdateUserPayload;
 import java.util.List;
 
@@ -14,9 +15,9 @@ public interface UserService {
 
 	ResponseEntity<?> addUser(UserEntity user);
 
-	String authenticate(String email, String password);
+	ResponseEntity<TokenCredential> authenticate(String email, String password);
 
-	UserInfo getUserData(String token);
+	ResponseEntity<UserInfo> getUserData(String token);
 
 	List<ProductEntity> getMyInventory(String token);
 
