@@ -10,6 +10,7 @@ import com.tradewing.controllers.impl.UserControllerImpl;
 import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UpdateUserPayload;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.LoginRequest;
 
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -93,12 +94,41 @@ class UserControllerImplTest {
         verify(userService, times(1)).addUser(any(UserEntity.class));
     }
 
-    /*
-    EXPECTED REFACTOR of Controller and Service
-    TO DO: loginUserTests
+    @Test
+    void LoginSuccessReturnsResponse() {
+        LoginRequest request = new LoginRequest();
+        request.setEmail("test@example.com");
+        request.setPassword("password123");
+        TokenCredential mockToken = new TokenCredential("mocked-token");
+        when(userService.authenticate(request.getEmail(), request.getPassword())).thenReturn(ResponseEntity.ok(mockToken));
 
-    TO DO: userData tests
-    */
+        ResponseEntity<TokenCredential> response = userController.login(request);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("mocked-token", response.getBody().getToken());
+        verify(userService).authenticate(request.getEmail(),request.getPassword());
+    }
+
+    @Test
+    void testGetUserData_Successful() {
+        TokenCredential tokenCredential = new TokenCredential("mocked-token");
+        UserInfo mockUserInfo = new UserInfo();
+        mockUserInfo.setName("John");
+        mockUserInfo.setSurname("Doe");
+        mockUserInfo.setEmail("john@example.com");
+
+        when(userService.getUserData(tokenCredential.getToken())).thenReturn(ResponseEntity.ok(mockUserInfo));
+
+        ResponseEntity<UserInfo> response = userController.getUserData(tokenCredential);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("John", response.getBody().getName());
+        assertEquals("Doe", response.getBody().getSurname());
+        assertEquals("john@example.com", response.getBody().getEmail());
+        verify(userService).getUserData(tokenCredential.getToken());
+    }
 
     @Test
     void getMyInventoryReturnsList() {
