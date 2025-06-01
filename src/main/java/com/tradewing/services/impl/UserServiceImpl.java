@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public ResponseEntity<TokenCredential> authenticate(String email, String rawPassword){
 		try{
         Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
@@ -76,6 +77,7 @@ public class UserServiceImpl implements UserService {
 		}
     }
 
+	@Override
 	public ResponseEntity<UserInfo> getUserData(String token){
 		UserInfo info;
 		try{
@@ -101,6 +103,7 @@ public class UserServiceImpl implements UserService {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
+	@Override
 	public List<ProductEntity> getMyInventory(String token){
 		List<ProductEntity> inventory = new ArrayList<>();
 		try{
@@ -117,6 +120,7 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
 	public ResponseEntity<UserInfo> updateUserData(UpdateUserPayload payload){
 		UserInfo response = new UserInfo();
 		try{
