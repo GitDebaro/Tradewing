@@ -26,37 +26,36 @@ export default{
     },
     methods: {
         async handleUpload(){
-            try{
-                const jwt = localStorage.getItem('token');
-                if (!jwt) throw new Error("JWT not found");
+          try{
+              const jwt = localStorage.getItem('token');
+              if (!jwt) throw new Error("JWT not found");
 
-                const response = await axios.post("/api/products/addProduct", {
-                    name: String(this.pName),
-                    price: String(this.ppPrice),
-                    description: String(this.pDesc),
-                    image: String(this.pImage),
-                    },{
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${jwt}`
-                    }
-                });
-    
-                if (!response || response.status != 200) throw new Error("[PROFILE MJS]: Error while uploading the product");
-    
-                const result = response;
-                alert("Product added correctly");
+              const response = await axios.post("/api/products/addProduct", {
+                  name: String(this.pName),
+                  price: String(this.ppPrice),
+                  description: String(this.pDesc),
+                  image: String(this.pImage),
+                  },{
+                  headers: {
+                      'Content-Type': 'application/json',
+                      'Authorization': `Bearer ${jwt}`
+                  }
+              });
 
-                this.pName = '';
-                this.ppPrice = '';
-                this.pImage = '';
-                this.pDesc = '';
+              if (!response || response.status != 200) throw new Error("[PROFILE MJS]: Error while uploading the product");
 
-        } catch (error) {
-            console.error("ERROR: ", error);
+              //const result = response;
+              alert("Product added correctly");
 
-            alert("Failed to upload a product");
-        }
+              this.pName = '';
+              this.ppPrice = '';
+              this.pImage = '';
+              this.pDesc = '';
+          } catch (error) {
+              console.error("ERROR: ", error);
+
+              alert("Failed to upload a product");
+          }
         }
     }
 }

@@ -57,7 +57,7 @@ export default {
           const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
           router.replace(lastPath);
         })
-        .catch((error) => {
+        .catch(() => {
           this.loginError = 'Login failed. Please check your credentials.';
         })
     }

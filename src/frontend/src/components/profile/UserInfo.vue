@@ -76,7 +76,7 @@ export default {
           this.user = response.data;
           this.imageTimestamp = Date.now();
         })
-        .catch((error) => {
+        .catch(() => {
           this.imageError = '';
           this.image = '';
           this.showModal = false;

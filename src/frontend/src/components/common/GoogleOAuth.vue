@@ -32,7 +32,7 @@ async function handleCredentialResponse(response) {
         const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
         router.replace(lastPath);
     })
-    .catch((error) =>{
+    .catch(() =>{
         this.loginError = 'Failed to get user data from Google';
     })
 
