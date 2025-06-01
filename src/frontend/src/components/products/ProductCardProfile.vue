@@ -5,7 +5,7 @@
         <button
         @click.stop="deleteProd"
         class="absolute top-2 right-2 z-20 bg-white rounded-full p-1 shadow hover:bg-red-100 text-red-600 hover:text-red-800 transition"
-        title="Eliminar producto"
+        title="Delete product"
         >
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
             viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

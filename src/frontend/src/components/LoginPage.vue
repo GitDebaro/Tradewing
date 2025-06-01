@@ -44,6 +44,11 @@ export default {
       loginError: ''
     }
   },
+  mounted() {
+    const token = localStorage.getItem('token');
+    const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
+    if(token) router.replace(lastPath);
+  },
   methods: {
     async handleLogin(){
       axios.post('/api/users/loginUser',{
