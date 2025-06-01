@@ -56,7 +56,6 @@ export default {
     })
     .then(response => {
       this.user = response.data;
-      console.log(this.user)
     })
     .catch(error => {
       console.error('Error al obtener usuario:', error.response?.data || error.message);
@@ -74,12 +73,10 @@ export default {
           this.imageError = '';
           this.image = '';
           this.showModal = false;
-          console.log('[UPDATE] Successful', response);
           this.user = response.data;
           this.imageTimestamp = Date.now();
         })
         .catch((error) => {
-          console.log(error)
           this.imageError = '';
           this.image = '';
           this.showModal = false;

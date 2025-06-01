@@ -45,8 +45,6 @@ const sendConfirmationEmail = async () => {
           }
         })
 
-        console.log('Order created successfully.')
-
     } catch (error) {
         console.error('Error sending confirmation email:', error);
     }

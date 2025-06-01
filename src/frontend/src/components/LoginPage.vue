@@ -53,13 +53,11 @@ export default {
         .then((response) =>{
           this.loginError = '';
           localStorage.setItem('token', response.data.token);
-          console.log('[LOGINPAGE] Successful login: ', response.data.token);
 
           const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
           router.replace(lastPath);
         })
         .catch((error) => {
-          console.log(error)
           this.loginError = 'Login failed. Please check your credentials.';
         })
     }

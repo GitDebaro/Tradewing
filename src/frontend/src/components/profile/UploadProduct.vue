@@ -27,7 +27,6 @@ export default{
     methods: {
         async handleUpload(){
             try{
-                console.log("[DEBUG] handleUpload triggered");
                 const jwt = localStorage.getItem('token');
                 if (!jwt) throw new Error("JWT not found");
 
@@ -46,7 +45,6 @@ export default{
                 if (!response || response.status != 200) throw new Error("[PROFILE MJS]: Error while uploading the product");
     
                 const result = response;
-                console.log("[PROFILE MJS] Product added:", result);
                 alert("Product added correctly");
 
                 this.pName = '';

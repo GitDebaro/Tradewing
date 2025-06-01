@@ -28,13 +28,11 @@ async function handleCredentialResponse(response) {
     .then((response) =>{
         this.loginError = '';
         localStorage.setItem('token', response.data);
-        console.log('[LOGINPAGE] Successful login: ', response.data);
 
         const lastPath = localStorage.getItem('lastPath') ?? '/dashboard';
         router.replace(lastPath);
     })
     .catch((error) =>{
-        console.log(error);
         this.loginError = 'Failed to get user data from Google';
     })
 

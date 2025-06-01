@@ -49,7 +49,6 @@ export default {
         })
         .then(response => {
             this.products = response.data;
-            console.log(this.products);
         })
         .catch(error => {
             console.error(error);

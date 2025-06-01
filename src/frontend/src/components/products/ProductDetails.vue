@@ -68,7 +68,6 @@ onMounted(async () => {
       params: { id: productId }
     })
     product.value = response.data
-    console.log(product.value.seller)
   } catch (error) {
     console.error('Error al cargar el producto:', error)
   }
