@@ -10,6 +10,7 @@ import com.tradewing.services.JWTUtils;
 import com.tradewing.repos.UserRepo;
 import com.tradewing.dto.UpdateUserPayload;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.TokenCredential;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -17,8 +18,10 @@ import org.mockito.InjectMocks;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -113,7 +116,6 @@ class UserServiceImplTest {
 
     @Test
     void addUserConflict(){
-        //Same user that was defined in the mock
         UserEntity newUser = new UserEntity();        
         newUser.setId(2L);
         newUser.setName("Test User");
@@ -138,12 +140,111 @@ class UserServiceImplTest {
         verify(usrRepo).save(any(UserEntity.class));
     }
 
-    /*
-    EXPECTED REFACTOR of Controller and Service
-    TO DO: loginUserTests
+    @Test
+    void authenticateSuccessReturnsResponse() {
+        String email = "user@example.com";
+        String rawPassword = "raw";
+        String hashedPassword = DigestUtils.sha256Hex(rawPassword);
 
-    TO DO: userData tests
-    */
+        UserEntity mockUser = new UserEntity();
+        mockUser.setEmail(email);
+        mockUser.setPassword(hashedPassword);
+
+        when(usrRepo.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(jwt.createToken(email)).thenReturn("mocked-jwt-token");
+
+        ResponseEntity<TokenCredential> response = userSC.authenticate(email, rawPassword);
+
+        
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("mocked-jwt-token", response.getBody().getToken());
+        verify(usrRepo).findByEmail(email);
+        verify(jwt).createToken(email);
+    }   
+
+    @Test
+    void authenticateUserNotFoundReturnsUnauthorized() {
+        String email = "notfound@example.com";
+        String rawPassword = "anyPassword";
+
+        when(usrRepo.findByEmail(email)).thenReturn(Optional.empty());
+
+        ResponseEntity<TokenCredential> response = userSC.authenticate(email, rawPassword);
+
+        assertNotNull(response);
+        assertEquals(401, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(usrRepo).findByEmail(email);
+        verify(jwt, never()).createToken(anyString());
+    }
+
+    @Test
+    void authenticateWrongPasswordReturnsUnauthorized() {
+        String email = "user@example.com";
+        String rawPassword = "wrongPassword";
+
+        UserEntity mockUser = new UserEntity();
+        mockUser.setEmail(email);
+        mockUser.setPassword(DigestUtils.sha256Hex("correctPassword"));
+
+        when(usrRepo.findByEmail(email)).thenReturn(Optional.of(mockUser));
+
+        ResponseEntity<TokenCredential> response = userSC.authenticate(email, rawPassword);
+
+        assertNotNull(response);
+        assertEquals(401, response.getStatusCodeValue());
+        assertNull(response.getBody());
+        verify(usrRepo).findByEmail(email);
+        verify(jwt, never()).createToken(anyString());
+    }
+
+    @Test
+    void getUserDataSuccessReturnsUserInfo() {
+        String token = "valid-token";
+
+        UserEntity mockUser = new UserEntity();
+        mockUser.setName("Alice");
+        mockUser.setSurname("Smith");
+        mockUser.setEmail("alice@example.com");
+        mockUser.setImage("avatar.png");
+
+        when(jwt.decode(token)).thenReturn(mockUser);
+
+        ResponseEntity<UserInfo> response = userSC.getUserData(token);
+
+        assertNotNull(response);
+        assertEquals(200, response.getStatusCodeValue());
+        assertEquals("Alice", response.getBody().getName());
+        assertEquals("Smith", response.getBody().getSurname());
+        assertEquals("alice@example.com", response.getBody().getEmail());
+        assertEquals("avatar.png", response.getBody().getImage());
+        verify(jwt).decode(token);
+    }
+
+    @Test
+    void getUserDataInvalidTokenReturnsNull() {
+        String token = "invalid-token";
+
+        when(jwt.decode(token)).thenReturn(null);
+
+        ResponseEntity<UserInfo> response = userSC.getUserData(token);
+
+        assertNull(response);
+        verify(jwt).decode(token);
+    }
+
+    @Test
+    void getUserDataExceptionReturnsNull() {
+        String token = "bad-token";
+
+        when(jwt.decode(token)).thenThrow(new RuntimeException("Invalid token"));
+
+        ResponseEntity<UserInfo> response = userSC.getUserData(token);
+
+        assertNull(response);
+        verify(jwt).decode(token);
+    }
     
    @Test
     void getMyInventoryReturnsList() {
