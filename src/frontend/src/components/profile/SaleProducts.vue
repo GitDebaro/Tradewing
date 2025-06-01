@@ -27,7 +27,7 @@ export default{
     async handleDelete(productId) {
       try {
         const jwt = localStorage.getItem('token');
-        if (!jwt) throw new Error('JWT no encontrado');
+        if (!jwt) throw new Error('JWT not found');
 
         await axios.delete(`/api/products/removeProduct`, {
           params: {
@@ -41,7 +41,7 @@ export default{
         location.reload();
 
       } catch (err) {
-        console.error('[SALEPRODUCT] Error al eliminar producto:', err);
+        console.error('[SALEPRODUCT] Error removing product:', err);
         alert('Failed to delete a product');
       }
     }

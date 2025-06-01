@@ -1,22 +1,22 @@
 <template>
   <div class="flex flex-col md:flex-row p-6 gap-6" v-if="product">
-    <!-- Imagen del producto -->
+    <!-- Product Image -->
     <div class="md:w-1/3 w-full flex justify-center items-center">
       <img
         :src="product.image"
-        alt="Imagen del producto"
+        alt="Product image"
         class="rounded-xl object-cover max-w-full max-h-[500px]"
       />
     </div>
 
-    <!-- Detalles del producto -->
+    <!-- Product details -->
     <div class="md:w-1/3 w-full flex flex-col justify-start gap-4">
       <h1 class="text-3xl font-bold">{{ product.name }}</h1>
       <p class="text-gray-700">{{ product.description }}</p>
       <p class="text-2xl font-semibold text-green-600">€{{ product.price }}</p>
-      <!-- Dirección de envío -->
+      <!-- Shipping address -->
       <div class="flex flex-col gap-2">
-        <label for="direccion" class="font-semibold text-gray-700">Dirección de envío:</label>
+        <label for="direccion" class="font-semibold text-gray-700">Shipping address:</label>
         <input
           id="direccion"
           v-model="shippingAddress"
@@ -43,7 +43,7 @@
   </div>
 
   <div v-else class="p-6 text-center text-gray-600">
-    Cargando producto...
+    Loading product...
   </div>
 </template>
 
@@ -69,7 +69,7 @@ onMounted(async () => {
     })
     product.value = response.data
   } catch (error) {
-    console.error('Error al cargar el producto:', error)
+    console.error('Error loading product:', error)
   }
 })
 
@@ -87,8 +87,8 @@ const checkout = async () => {
     const stripe = await stripePromise
     await stripe.redirectToCheckout({ sessionId: response.data.id })
   } catch (error) {
-    console.error('Error al crear la sesión de pago:', error)
-    alert('Hubo un problema al iniciar el pago.')
+    console.error('Error creating payment session:', error)
+    alert('There was an error in the payment session.')
   }
 }
 </script>

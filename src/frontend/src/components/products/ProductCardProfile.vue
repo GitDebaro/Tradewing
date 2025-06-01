@@ -1,7 +1,7 @@
 <template>
     <div class="relative group block border rounded-md p-2 hover:shadow-md transition">
 
-        <!-- Botón flotante de eliminar -->
+        <!-- Delete Button -->
         <button
         @click.stop="deleteProd"
         class="absolute top-2 right-2 z-20 bg-white rounded-full p-1 shadow hover:bg-red-100 text-red-600 hover:text-red-800 transition"
@@ -21,7 +21,7 @@
         <router-link :to="`/product/${product.id}`" class="group relative block">
             <img
             :src="product.image"
-            :alt="`Imagen de ${product.name}`"
+            :alt="`Image: ${product.name}`"
             class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
             />
             <div class="mt-4 flex justify-between">

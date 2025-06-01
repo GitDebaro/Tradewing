@@ -58,6 +58,7 @@ public class OrderServiceImplTest {
         mockProduct.setId(1L);
         mockProduct.setName("Test Product");
         mockProduct.setPrice(100L);
+        mockProduct.setAvailable(true);
 
         mockOrder = new OrderEntity();
         mockOrder.setId(1L);
@@ -135,10 +136,10 @@ public class OrderServiceImplTest {
         List<OrderStep> steps = order.getSteps();
         if (steps == null || steps.size() != 4) return false;
 
-        return steps.get(0).getName().equals("Pedido recibido") &&
-               steps.get(1).getName().equals("Saliendo del warehouse") &&
-               steps.get(2).getName().equals("En reparto") &&
-               steps.get(3).getName().equals("Entregado") &&
+        return steps.get(0).getName().equals("Order received") &&
+               steps.get(1).getName().equals("Leaving the warehouse") &&
+               steps.get(2).getName().equals("In distribution") &&
+               steps.get(3).getName().equals("Delivered") &&
                steps.get(0).getDeadline().isBefore(steps.get(1).getDeadline()) &&
                steps.get(1).getDeadline().isBefore(steps.get(2).getDeadline()) &&
                steps.get(2).getDeadline().isBefore(steps.get(3).getDeadline());
