@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
-import org.springframework.http.HttpStatus;
-
 import java.util.List;
 
 @RestController
@@ -43,26 +41,13 @@ public class UserControllerImpl implements UserController {
 	@Override
 	@PostMapping("/loginUser")
 	public ResponseEntity<TokenCredential> login(@RequestBody LoginRequest request) {
-		try{
-			String token = userSC.authenticate(request.getEmail(), request.getPassword());
-			TokenCredential login = new TokenCredential(token);
-
-			return ResponseEntity.ok(login);
-		}
-		catch(RuntimeException e){
-			System.out.println("[LOGIN][ERROR] Failed to login user:" + request.getEmail());
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
+		return userSC.authenticate(request.getEmail(), request.getPassword());
 	}
 
 	@Override
 	@PostMapping("/data")
 	public ResponseEntity<UserInfo> getUserData(@RequestBody TokenCredential userToken){
-		UserInfo info = userSC.getUserData(userToken.getToken());
-		if(info != null)
-			return ResponseEntity.ok(userSC.getUserData(userToken.getToken()));
-		else
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		return userSC.getUserData(userToken.getToken());
 	}
 
 	@Override

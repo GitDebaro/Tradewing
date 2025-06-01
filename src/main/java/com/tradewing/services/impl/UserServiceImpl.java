@@ -12,9 +12,8 @@ import org.springframework.stereotype.Service;
 import org.apache.commons.codec.digest.DigestUtils;
 import lombok.RequiredArgsConstructor;
 import com.tradewing.dto.UserInfo;
+import com.tradewing.dto.TokenCredential;
 import com.tradewing.dto.UpdateUserPayload;
-
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
 
@@ -51,7 +50,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String authenticate(String email, String rawPassword){
+	public ResponseEntity<TokenCredential> authenticate(String email, String rawPassword){
+		try{
         Optional<UserEntity> Optionaluser = usrRepo.findByEmail(email);
 
         if(Optionaluser.isEmpty()){
@@ -65,18 +65,28 @@ public class UserServiceImpl implements UserService {
         }
 
         System.out.println("[LOGIN]: Login success");
-        return jwt.createToken(user.getEmail());
+
+
+		TokenCredential login = new TokenCredential(jwt.createToken(user.getEmail()));
+
+		return ResponseEntity.ok(login);
+
+		}catch(RuntimeException e){
+			System.out.println("[LOGIN][ERROR] Failed to login user:");
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
     }
 
 	@Override
-	public UserInfo getUserData(String token){
+	public ResponseEntity<UserInfo> getUserData(String token){
+		UserInfo info;
 		try{
 			UserEntity currentUser = jwt.decode(token);
 
 			if(currentUser == null)
 				return null;
 
-			return UserInfo.builder()
+			info = UserInfo.builder()
 					.name(currentUser.getName())
 					.surname(currentUser.getSurname())
 					.email(currentUser.getEmail())
@@ -87,6 +97,10 @@ public class UserServiceImpl implements UserService {
 			System.out.println("[PROFILE][ERROR] Could not get claims from token");
 			return null;
 		}
+		if(info != null)
+			return ResponseEntity.ok(info);
+		else
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 	}
 
 	@Override

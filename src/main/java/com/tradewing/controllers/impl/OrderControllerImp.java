@@ -1,13 +1,9 @@
 package com.tradewing.controllers.impl;
 
 import com.tradewing.controllers.OrderController;
-import com.tradewing.controllers.ProductController;
-import com.tradewing.dto.AddProductRequest;
 import com.tradewing.dto.OrderRequest;
 import com.tradewing.models.OrderEntity;
-import com.tradewing.models.ProductEntity;
 import com.tradewing.services.OrderService;
-import com.tradewing.services.ProductService;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
