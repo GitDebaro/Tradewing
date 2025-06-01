@@ -4,7 +4,7 @@
     <div class="md:w-1/3 w-full flex justify-center items-center">
       <img
         :src="product.image"
-        alt="Product Image"
+        alt="Product image"
         class="rounded-xl object-cover max-w-full max-h-[500px]"
       />
     </div>
@@ -101,8 +101,8 @@ const checkout = async () => {
     const stripe = await stripePromise
     await stripe.redirectToCheckout({ sessionId: response.data.id })
   } catch (error) {
-    console.error('Error creating the pay session:', error)
-    alert('Problem during the pay processing.')
+    console.error('Error creating payment session:', error)
+    alert('There was an error in the payment session.')
   }
 }
 </script>

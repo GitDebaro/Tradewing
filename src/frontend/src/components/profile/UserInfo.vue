@@ -1,7 +1,7 @@
 <template>
   <div v-if="user" class="flex justify-between items-center mb-6">
     <div class="flex items-center space-x-4">
-        <img :src="user.image + '?t=' + imageTimestamp" alt="Foto de perfil" referrerpolicy="no-referrer" class="w-24 h-24 rounded-full object-cover bg-blue-500">
+        <img :src="user.image + '?t=' + imageTimestamp" alt="Profile picture" referrerpolicy="no-referrer" class="w-24 h-24 rounded-full object-cover bg-blue-500">
         <div>
           <h2 class="text-2xl font-semibold">{{ user.name }} {{user.surname}}</h2>
           <p class="text-gray-600">{{ user.email }}</p>
@@ -58,7 +58,7 @@ export default {
       this.user = response.data;
     })
     .catch(error => {
-      console.error('Error al obtener usuario:', error.response?.data || error.message);
+      console.error('Error getting user:', error.response?.data || error.message);
     });
   },
   methods: {

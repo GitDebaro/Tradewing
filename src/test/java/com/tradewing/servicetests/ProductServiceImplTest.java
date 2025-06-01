@@ -1,7 +1,5 @@
 package com.tradewing.servicetests;
 
-import org.springframework.http.ResponseEntity;
-
 import com.tradewing.models.ProductEntity;
 import com.tradewing.models.UserEntity;
 import com.tradewing.services.JWTUtils;

@@ -9,20 +9,11 @@
             </div>
         </form>
 
-        <div class="grid grid-cols-[4fr_1fr] gap-4 my-4 w-full min-h-ful">
+        <div class="grid grid grid-cols-1 gap-4 my-4 w-full min-h-ful">
             <section class="p-4 border border-gray-300 rounded-md flex flex-col flex-wrap gap-2 bg-blue-50" id="catalogo">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <ProductCard v-for="product in products" :key="product.id" :product="product"/>
+                    <ProductCard v-for="product in products.filter(p => p.available)" :key="product.id" :product="product"/>
                 </div>
-            </section>
-            <!--Posibly deprecated and replaced with new funcionality-->
-            <section class="p-4 border border-gray-300 rounded-md bg-white" id="cesta">
-                <h1 class="text-2xl font-bold mb-2">Cesta</h1>
-                <div class="border rounded-md p-2 max-h-[400px] overflow-y-auto">
-                    <ul id="cesta-compra" class="list-disc pl-5 space-y-2"></ul>
-                </div>
-                <button @click="handlePagar"
-                class="mt-4 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md font-semibold transition">Purchase</button>
             </section>
         </div>
     </main>

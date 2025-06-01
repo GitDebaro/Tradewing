@@ -1,6 +1,6 @@
 <template>
     <div v-if="orders.length === 0" class="text-center text-gray-500 mt-4">
-      No has realizado ninguna compra.
+      No orders yet.
     </div>
     <OrderCardProfile
       v-for="order in orders"
@@ -35,7 +35,7 @@ export default {
         });
         this.orders = response.data;
       } catch (error) {
-        console.error('[Orders] Error al obtener órdenes:', error.response?.data || error.message);
+        console.error('[Orders] Error loading orders:', error.response?.data || error.message);
       }
     },
     async deleteOrder(orderId) {
@@ -49,8 +49,8 @@ export default {
         });
         this.orders = this.orders.filter(order => order.id !== orderId);
       } catch (error) {
-        console.error('[Orders] Error al eliminar orden:', error);
-        alert('No se pudo eliminar el pedido.');
+        console.error('[Orders] Error removing order', error);
+        alert('Error removing order.');
       }
     }
   },

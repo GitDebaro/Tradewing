@@ -1,9 +1,8 @@
 <template>
   <div class="relative group block border rounded-md p-2 hover:shadow-md transition bg-white">
 
-    <!-- Botón flotante para eliminar pedido -->
     <button
-      v-if="['Entregado', 'Desconocido', 'Perdido'].includes(currentStep(order))"
+      v-if="['Delivered', 'Unknown', 'Lost'].includes(currentStep(order))"
       @click.stop="confirmDelete"
       class="absolute top-2 right-2 z-20 bg-white rounded-full p-1 shadow hover:bg-red-100 text-red-600 hover:text-red-800 transition"
       title="Eliminar pedido"
@@ -22,7 +21,7 @@
     <router-link :to="`/product/${order.product.id}`" class="group relative block">
       <img
         :src="order.product.image"
-        :alt="`Imagen de ${order.product.name}`"
+        :alt="`Image: ${order.product.name}`"
         class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:h-64"
       />
       <div class="mt-4 flex justify-between items-center">
@@ -34,7 +33,7 @@
         </p>
       </div>
       <p class="text-xs text-gray-500 mt-1">
-        Estado: <strong>{{ currentStep(order) }}</strong>
+        Current state: <strong>{{ currentStep(order) }}</strong>
       </p>
     </router-link>
   </div>
@@ -51,20 +50,20 @@ export default {
   emits: ['deleteOrder'],
   methods: {
     currentStep(order) {
-      if (!order.steps || order.steps.length === 0) return 'Desconocido';
+      if (!order.steps || order.steps.length === 0) return 'Unknown';
 
       const now = new Date();
       const completedSteps = order.steps.filter(step =>
         step.deadline && new Date(step.deadline) <= now
       );
 
-      if (completedSteps.length === 0) return 'Pendiente';
+      if (completedSteps.length === 0) return 'Pending';
 
       completedSteps.sort((a, b) => new Date(b.deadline) - new Date(a.deadline));
-      return completedSteps[0].name || 'Perdido';
+      return completedSteps[0].name || 'Lost';
     },
     confirmDelete() {
-      const confirmed = window.confirm('¿Seguro que deseas eliminar este pedido?');
+      const confirmed = window.confirm('Delete this order?');
       if (confirmed) {
         this.$emit('deleteOrder', this.order.id);
       }

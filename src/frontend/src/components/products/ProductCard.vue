@@ -2,7 +2,7 @@
   <router-link :to="`/product/${product.id}`" class="group relative block">
     <img
       :src="product.image"
-      :alt="`Imagen de ${product.name}`"
+      :alt="`Image: ${product.name}`"
       class="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75 lg:aspect-auto lg:h-80"
     />
     <div class="mt-4 flex justify-between">

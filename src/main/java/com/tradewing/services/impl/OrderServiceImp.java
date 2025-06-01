@@ -71,10 +71,17 @@ public class OrderServiceImp implements OrderService {
         LocalDateTime start = LocalDateTime.now();
         List<OrderStep> steps = generateSteps(start);
 
-        Optional <ProductEntity> orderProd;
-        orderProd = productRepo.findById(product);
+        ProductEntity prod = productRepo.findById(product).get();
 
-        order.setProduct(orderProd.get());
+        // Verificar disponibilidad
+        if (!Boolean.TRUE.equals(prod.getAvailable())) {
+            throw new RuntimeException("Product not available: " + prod.getName());
+        }
+
+        prod.setAvailable(false);
+        productRepo.save(prod);
+
+        order.setProduct(prod);
 
         order.setUser(user);
 
@@ -83,7 +90,7 @@ public class OrderServiceImp implements OrderService {
         order.setSteps(steps);
 
         System.out.println("[CREATEORDER SERVICE]: Check steps: "+ order.getSteps());
-		System.out.println("[CREATEORDER SERVICE]: Check producto: "+ order.getProduct().getName());
+		System.out.println("[CREATEORDER SERVICE]: Check product available: "+ order.getProduct().getAvailable());
 		System.out.println("[CREATEORDER SERVICE]: Check user: "+ order.getUser().getEmail());
 		System.out.println("[CREATEORDER SERVICE]: Order successfully created");
 		orderRepo.save(order);
@@ -92,21 +99,21 @@ public class OrderServiceImp implements OrderService {
     public List<OrderStep> generateSteps(LocalDateTime startTime) {
         List<OrderStep> steps = new ArrayList<>();
 
-        // Paso 1: Pedido recibido (entre 2 y 3 horas desde ahora)
-        LocalDateTime pedidoRecibido = startTime.plusMinutes(1/*+ new Random().nextInt(0)*/);
-        steps.add(new OrderStep("Pedido recibido", pedidoRecibido));
+        // Step 1: 2/3h
+        LocalDateTime received = startTime.plusMinutes(1/*+ new Random().nextInt(0)*/);
+        steps.add(new OrderStep("Order received", received));
 
-        // Paso 2: Saliendo del warehouse (30 min a 1h después del anterior)
-        LocalDateTime saliendo = pedidoRecibido.plusMinutes(1);
-        steps.add(new OrderStep("Saliendo del warehouse", saliendo));
+        // Step 2: 30 min 1h
+        LocalDateTime exiting = received.plusMinutes(1);
+        steps.add(new OrderStep("Leaving the warehouse", exiting));
 
-        // Paso 3: En reparto (30 min a 1h después del anterior)
-        LocalDateTime enReparto = saliendo.plusMinutes(1);
-        steps.add(new OrderStep("En reparto", enReparto));
+        // Step 3: 30 min 1h
+        LocalDateTime distrb = exiting.plusMinutes(1);
+        steps.add(new OrderStep("In distribution", distrb));
 
-        // Paso 4: Recibido (15-30 min después del anterior)
-        LocalDateTime entregado = enReparto.plusMinutes(1);
-        steps.add(new OrderStep("Entregado", entregado));
+        // Step 4: 15-30 min 
+        LocalDateTime delivered = distrb.plusMinutes(1);
+        steps.add(new OrderStep("Delivered", delivered));
 
         return steps;
     }

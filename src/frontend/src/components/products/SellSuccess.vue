@@ -19,7 +19,6 @@ import axios from 'axios'
 
 const route = useRoute()
 const productId = route.params.id
-// Puedes usar esto para enviar un correo o cargar los datos del producto:
 const sendConfirmationEmail = async () => {
     try {
          const response = await axios.post('/api/users/data', {
@@ -33,11 +32,11 @@ const sendConfirmationEmail = async () => {
             email: user.email    
             }
         })
-        // Crear orden de pedido
+        // Create order
         const jwt = localStorage.getItem('token');
         await axios.post('/api/order/create', {
           productId: productId,
-          shippingAddress: localStorage.getItem('shippingAddress')  // Puedes cambiarlo según el flujo real
+          shippingAddress: localStorage.getItem('shippingAddress') 
         },{
           headers: {
               'Content-Type': 'application/json',

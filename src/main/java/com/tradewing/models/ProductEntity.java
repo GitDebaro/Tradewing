@@ -33,6 +33,9 @@ public class ProductEntity {
 
     private String image;
 
+    @Column(nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private Boolean available;
+
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonBackReference // evita bucles infinitos en la serialización
     private OrderEntity order;
