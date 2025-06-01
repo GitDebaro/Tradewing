@@ -33,43 +33,41 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public ResponseEntity<?> googleLogin(TokenCredential googleToken) {
         System.out.println("[G-OAuth] Inbound request");
-        try{
-            var transport = GoogleNetHttpTransport.newTrustedTransport();
-            var jsonFactory = JacksonFactory.getDefaultInstance();
+        try {
+            GoogleIdToken idToken = verifyGoogleToken(googleToken.getToken());
+            if (idToken == null) return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
-                .setAudience(Collections.singletonList(CLIENT_ID))
-                .build();
+            UserEntity user = findOrCreateUser(idToken.getPayload());
+            String jwtToken = jwt.createToken(user.getEmail());
 
-            GoogleIdToken idToken = verifier.verify(googleToken.getToken());
-            if (idToken != null) {
-                GoogleIdToken.Payload payload = idToken.getPayload();
-
-                Optional<UserEntity> userOptional = usrRepo.findByEmail(payload.getEmail());
-                UserEntity googleUser;
-
-                if (userOptional.isPresent()) {
-                    googleUser = userOptional.get();
-                } else {
-                    googleUser = new UserEntity();
-                    googleUser.setId(null);
-                    googleUser.setEmail(payload.getEmail());
-                    googleUser.setPassword("GOOGLE-USER");
-                    googleUser.setName((String) payload.get("given_name"));
-                    googleUser.setSurname((String) payload.get("family_name"));
-                    googleUser.setImage((String) payload.get("picture"));
-                    usrRepo.save(googleUser);
-                }
-
-                String trdToken = jwt.createToken(googleUser.getEmail());
-
-                return ResponseEntity.ok(trdToken);
-            } else {
-                return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-            }
+            return ResponseEntity.ok(jwtToken);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        catch(Exception e){
-            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-        }
+    }
+
+    public GoogleIdToken verifyGoogleToken(String token) throws Exception {
+        var transport = GoogleNetHttpTransport.newTrustedTransport();
+        var jsonFactory = JacksonFactory.getDefaultInstance();
+
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+            .setAudience(Collections.singletonList(CLIENT_ID))
+            .build();
+
+        return verifier.verify(token);
+    }
+
+    public UserEntity findOrCreateUser(GoogleIdToken.Payload payload) {
+        String email = payload.getEmail();
+
+        return usrRepo.findByEmail(email).orElseGet(() -> {
+            UserEntity newUser = new UserEntity();
+            newUser.setEmail(email);
+            newUser.setPassword("GOOGLE-USER");
+            newUser.setName((String) payload.get("given_name"));
+            newUser.setSurname((String) payload.get("family_name"));
+            newUser.setImage((String) payload.get("picture"));
+            return usrRepo.save(newUser);
+        });
     }
 }

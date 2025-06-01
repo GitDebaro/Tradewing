@@ -1,4 +1,4 @@
-package com.tradewing.controllerstest;
+package com.tradewing.controllertests;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpStatus;
